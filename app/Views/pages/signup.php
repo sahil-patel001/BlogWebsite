@@ -1,3 +1,4 @@
+<?php echo view('templetes/header'); ?>
 </br>
 </br>
 <div class="container">
@@ -53,3 +54,4 @@
         <br>
     </div>
 </div>
+<?php echo view('templetes/footer'); ?>

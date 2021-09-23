@@ -11,20 +11,16 @@ class Pages extends BaseController
 {
     public function index()
     {
-        helper('form');
+        helper(['form']);
 
-        echo view('templetes/header');
-        echo view('pages/signup');
-        echo view('templetes/footer');
+        return view('pages/signup');
     }
 
     public function showme ($page = 'signup') 
     {
         helper('form');
 
-        echo view('templetes/header');
-        echo view('pages/'.$page);
-        echo view('templetes/footer');
+        return view('pages/'.$page);
     }
     
     function save()  
@@ -43,12 +39,9 @@ class Pages extends BaseController
 
             if($user->insert($data)){
                 $_SESSION['success'] = "Register Successfully.";
-                // $session = session();
-                // $session->setFlashdata('success','Successfully Register');
-                // return redirect()->to('/login');
-                echo view('templetes/header');
-                echo view('pages/login');
-                echo view('templetes/footer');
+
+                return redirect()->to('/login');
+
             } else {
                 var_dump($admin->errors());
             } 
@@ -58,20 +51,12 @@ class Pages extends BaseController
 
             if($admin->insert($data)){
                 $_SESSION['success'] = "Register Successfully.";
-                // $session = session();
-                // $session->setFlashdata('success','Successfully Register');
+
                 return redirect()->to('/login');
-                // echo view('templetes/header');
-                // echo view('pages/login');
-                // echo view('templetes/footer');
+
             } else {
                 var_dump($admin->errors());
             } 
-    }
-    }
-
-    function login()
-    {
-
+        }
     }
 }
