@@ -1,1 +1,2 @@
-<h1>user profile</h1>
+<?php echo view('templetes/userheader');
+<?php echo view('templetes/footer');

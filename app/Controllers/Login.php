@@ -25,7 +25,8 @@ class Login extends Controller
             $authenticatePassword = ($password == $pass ? true : false);
 
             if($authenticatePassword){
-                
+                $_SESSION['user'] = $user['fname'];
+                $username = $_SESSION['user'];
                 return view('profiles/userprofile');
             
             }else{
@@ -39,7 +40,8 @@ class Login extends Controller
             $authenticatePassword = ($password == $pass ? true : false);
 
             if($authenticatePassword){
-                
+                $_SESSION['admin'] = $admin['fname'];
+                $adminname = $_SESSION['admin'];
                 return redirect()->to('profiles/adminprofile');
             
             }else{
@@ -48,7 +50,8 @@ class Login extends Controller
             }
 
         }else{
-            $session->setFlashdata('msg', 'Email does not exist.');
+            // $session->setFlashdata('msg', 'Email does not exist.');
+            $_SESSION['msg'] = 'Email does not exits.';
             return redirect()->to('/login');
         }
     }
