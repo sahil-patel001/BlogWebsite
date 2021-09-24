@@ -26,11 +26,12 @@ class Login extends Controller
 
             if($authenticatePassword){
                 $_SESSION['user'] = $user['fname'];
-                $username = $_SESSION['user'];
-                return view('profiles/userprofile');
+                // $_SESSION['id'] = $user['uid'];
+                $this->session->set_userdata('uid',$user['uid']);
+                return view('userview/listofpost');
             
             }else{
-                $_SESSION['msg'] = 'Password is incorrect.';
+                $_SESSION['msg'] = "Password is incorrect.";
                 return redirect()->to('/login');
             }
 
@@ -41,11 +42,10 @@ class Login extends Controller
 
             if($authenticatePassword){
                 $_SESSION['admin'] = $admin['fname'];
-                $adminname = $_SESSION['admin'];
-                return redirect()->to('profiles/adminprofile');
+                return view('adminview/post');
             
             }else{
-               
+                $_SESSION['msg'] = 'Password is incorrect.';
                 return redirect()->to('/login');
             }
 

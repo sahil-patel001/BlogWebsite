@@ -16,12 +16,40 @@ class Pages extends BaseController
         return view('pages/signup');
     }
 
-    public function showme ($page = 'signup') 
+    public function signup()
     {
-        helper('form');
+        helper(['form']);
 
-        return view('pages/'.$page);
+        return view('pages/signup');
     }
+
+    public function login()
+    {
+        helper(['form']);
+
+        return view('pages/login');
+    }
+
+    public function logout()
+    {
+        unset($_SESSION['user']);
+        unset($_SESSION['admin']);
+        unset($_SESSION['success']);
+
+        return view('pages/login');
+    }
+
+    // public function showme ($page = 'signup') 
+    // {
+    //     helper('form');
+
+    //     if ( ! is_file(APPPATH.'/Views/pages/'.$page.'.php')) {
+    //         // Whoops, we don't have a page for that!
+    //         throw new \CodeIgniter\Exceptions\PageNotFoundException($page);
+    //     }
+
+    //     return view('pages/'.$page);
+    // }
     
     function save()  
     {
