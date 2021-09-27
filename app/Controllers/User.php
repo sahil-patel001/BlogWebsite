@@ -1,17 +1,25 @@
 <?php
 
 namespace App\Controllers;
-session_start();
 use CodeIgniter\Controller;
 use App\Models\BlogModel;
+use App\Models\Image;
 use App\Controllers\Login;
 
 
 class User extends Controller
 {
+    public $CI = NULL;
+
     public function index()
-    {
-        return view('userview/listofpost');
+    {   
+        $getAll = new BlogModel();
+
+        $data['all_data'] = $getAll->paginate(10);
+
+        $data['pagination_link'] = $getAll->pager;
+
+        return view('userview/listofpost', $data);
     }
 
     public function addpost()
@@ -21,41 +29,79 @@ class User extends Controller
 
     public function poststatus()
     {
-        return view('userview/poststatus');
+        $session = session();
+
+        $id = $session->get('id');
+        $getPost = new BlogModel();
+
+        $data['post_data'] = $getPost->where('uid', $id)->orderBy('bid')->paginate(2);
+
+        $data['pagination_link'] = $getPost->pager;
+
+        return view('userview/poststatus', $data);
     }
 
     public function save() 
     {
+        $session = session();
         helper(['form', 'url']);
 
         $img = $this->request->getFile('img');
-        // $img->move(WRITEPATH . 'uploads');
-        // if(isset($_SESSION['id'])){
-        //     $id = $_SESSION['id'];
-        // }
-            //TODO: use session for get the user id and pass it into data
+
         $data = [
-            'uid' => $this->session->userdata('uid'),
+            'uid' => $session->get('id'),
             'b_title' => $this->request->getVar('title'),
+            //TODO: make this image comented while using for multiple image and also chnage the type multiple and name in addpost.php
             'b_image' =>  $img->getName(),
-            'b_description' => $this->request->getVar('description')
+            'b_description' => $this->request->getVar('description'),
+            'addedBy' => $session->get('user')
         ];
 
-        print_r($data);
-        die();
-
         $post = new BlogModel();
+        
+
+        //TODO: find out the query for getting last inserted blog's id
+        // $post->insert($data);
+
+        // $id = $post->insertID();
+
+        // $addImg = new Image();
+
+        // $imgs = $this->request->getFiles();
+        
+        // foreach($imgs['img'] as $img){
+        //     $dataImg = [
+        //         'img' => $img->move('./upload', $img->getName()),
+        //         'bid' => $id,
+        //     ];
+        //     print_r($dataImg);
+        // }
+        
+        // die();
 
         if($post->insert($data))
         {
-            $_SESSION['post'] = 'Post Created Successfully.';
-            return view('userview/listofpost');
-        } 
+            $session->set('post','Post Created Successfully.');
+            return redirect()->to('user/poststatus');
+        }
         else
         {
-            $_SESSION['err'] = 'Something Went Wrong.';
-            return view('userview/listofpost');
+            $session->set('err','Something Went Wrong.');
+            return view('userview/addpost');
         }
+    }
+
+    public function detail()
+    {
+        $id = $_GET['id'];
+
+        $detail = new BlogModel();
+
+        $detail->select('*');
+        $detail->where('bid',$id);
+        $data['detail'] = $detail->get();
+  
+        return view('userview/detailpost', $data);
     }
 }
 

@@ -5,6 +5,8 @@ use CodeIgniter\Controller;
 use App\Models\UserModel;
 use App\Models\AdminModel;
 
+
+
 class Login extends Controller
 {
     public function loginAuth(){
@@ -25,13 +27,14 @@ class Login extends Controller
             $authenticatePassword = ($password == $pass ? true : false);
 
             if($authenticatePassword){
-                $_SESSION['user'] = $user['fname'];
-                // $_SESSION['id'] = $user['uid'];
-                $this->session->set_userdata('uid',$user['uid']);
-                return view('userview/listofpost');
+
+                $session->set('id',$user['uid']);
+                $session->set('user',$user['fname']);
+                return redirect()->to('user');
             
             }else{
-                $_SESSION['msg'] = "Password is incorrect.";
+                $session->set('msg','Password is incorrect.');
+
                 return redirect()->to('/login');
             }
 
@@ -41,17 +44,20 @@ class Login extends Controller
             $authenticatePassword = ($password == $pass ? true : false);
 
             if($authenticatePassword){
-                $_SESSION['admin'] = $admin['fname'];
+                
+                $session->set('id',$admin['aid']);
+                $session->set('admin',$admin['fname']);
                 return view('adminview/post');
             
             }else{
-                $_SESSION['msg'] = 'Password is incorrect.';
+                $session->set('msg','Password is incorrect.');
+
                 return redirect()->to('/login');
             }
 
         }else{
-            // $session->setFlashdata('msg', 'Email does not exist.');
-            $_SESSION['msg'] = 'Email does not exits.';
+            $session->set('msg','Email does not exits.');
+            
             return redirect()->to('/login');
         }
     }

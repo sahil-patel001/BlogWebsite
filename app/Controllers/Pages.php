@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-session_start();
+// session_start();
 
 use App\Models\UserModel;
 use App\Models\AdminModel;
@@ -32,27 +32,18 @@ class Pages extends BaseController
 
     public function logout()
     {
-        unset($_SESSION['user']);
-        unset($_SESSION['admin']);
-        unset($_SESSION['success']);
+        $session = session();
+        $session->remove('user');
+        $session->remove('admin');
+        $session->remove('success');
 
         return view('pages/login');
     }
-
-    // public function showme ($page = 'signup') 
-    // {
-    //     helper('form');
-
-    //     if ( ! is_file(APPPATH.'/Views/pages/'.$page.'.php')) {
-    //         // Whoops, we don't have a page for that!
-    //         throw new \CodeIgniter\Exceptions\PageNotFoundException($page);
-    //     }
-
-    //     return view('pages/'.$page);
-    // }
     
     function save()  
     {
+        $session = session();
+
         $data = [
             'fname' => $this->request->getVar('fname'),
             'lname' => $this->request->getVar('lname'),
@@ -66,7 +57,8 @@ class Pages extends BaseController
             $user = new UserModel();
 
             if($user->insert($data)){
-                $_SESSION['success'] = "Register Successfully.";
+                // $_SESSION['success'] = "Register Successfully.";
+                $session->set('success','Register Successfully.');
 
                 return redirect()->to('/login');
 
@@ -78,8 +70,9 @@ class Pages extends BaseController
             $admin = new AdminModel();
 
             if($admin->insert($data)){
-                $_SESSION['success'] = "Register Successfully.";
-
+                // $_SESSION['success'] = "Register Successfully.";
+                $session->set('success','Register Successfully.');
+                
                 return redirect()->to('/login');
 
             } else {

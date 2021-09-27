@@ -1,6 +1,89 @@
-
 <?php echo view('templetes/userheader'); ?>
 <br>
+<?php $session = session(); ?>
+<div class="text-success text-center"><?php echo $session->get('post'); ?></div>
+<?php $session->remove('post'); ?>
+<div class="text-danger text-center"><?php echo $session->get('err'); ?></div>
+<?php $session->remove('err'); ?>
 <br>
-<h1>user can see the status of the post which he want to post is approved or not.</h1>
+<div class="container">
+
+    <h2 class="text-secondary text-center mt-4 mb-4">Post Status</h2>
+<br>
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">All Post</div>
+                <div class="col text-right">
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form action="<?php echo site_url("user/poststatus"); ?>" method="get">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Title</th>
+                            <th>Image</th>
+                            <th>Description</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                            <th>Status</th>
+                        </tr>
+                        <?php
+                            foreach($post_data as $data)
+                            {
+                                echo '
+                                <tr>
+                                    <td>'.$data["b_title"].'</td>
+                                    <td>'.$data["b_image"].'</td>
+                                    <td>'.$data["b_description"].'</td>
+                                    <td><button><i class="bi bi-pencil-square"></i></button></td>
+                                    <td><button><i class="bi bi-trash-fill"></i></button></td>
+                                    <td></td>
+                                </tr>';
+                            }
+
+                        ?>
+                    </table>
+            </div>
+            <div>
+                <?php
+
+                    if($pagination_link)
+                    {
+                        $pagination_link->setPath('User/poststatus');
+
+                        echo $pagination_link->links();
+                    }
+                    
+                    ?>
+
+            </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<style>
+.pagination li a {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.pagination li.active a {
+    z-index: 1;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+</style>
 <?php echo view('templetes/footer'); ?>
