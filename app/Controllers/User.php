@@ -16,7 +16,7 @@ class User extends Controller
     {   
         $getAll = new BlogModel();
 
-        $data['all_data'] = $getAll->paginate(10);
+        $data['all_data'] = $getAll->where('status', 1)->paginate(10);
 
         $data['pagination_link'] = $getAll->pager;
 

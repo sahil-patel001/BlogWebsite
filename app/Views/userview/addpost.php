@@ -2,6 +2,9 @@
 <br>
 <br>
 <h1 class="text-secondary text-center">Add Post</h1>
+<div class="container">
+    <hr>
+</div>
 <br>
 <div class="col-lg-6 m-auto">
     <form action="<?php echo site_url("User/save"); ?>" method="post" enctype='multipart/form-data'>

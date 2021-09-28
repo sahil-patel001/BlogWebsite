@@ -2,6 +2,9 @@
 <br>
 <br>
 <h1 class="text-secondary text-center">Contact Page</h1>
+<div class="container">
+    <hr>
+</div>
 <br>
 <?php $session = session(); ?>
 <?php if(isset($session)) { ?>

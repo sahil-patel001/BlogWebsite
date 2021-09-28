@@ -1,9 +1,8 @@
 <?php echo view('templetes/userheader'); ?>
 <br>
-<br>
 <div class="container">
 
-    <h2 class="text-secondary text-center mt-4 mb-4">Post Status</h2>
+    <h1 class="text-secondary text-center mt-4 mb-4">Post Status</h1>
     <hr>
     <?php $session = session(); ?>
     <h5 class="text-success text-center"><?php echo $session->get('post'); ?></h5>
@@ -24,7 +23,7 @@
             <div class="table-responsive">
                 <form action="<?php echo site_url("user/poststatus"); ?>" method="get">
                     <table class="table table-striped table-bordered">
-                        <tr>
+                        <tr class="text-center">
                             <th>Title</th>
                             <!-- <th>Image</th> -->
                             <th>Description</th>
@@ -34,16 +33,15 @@
                         </tr>
                         <?php
                             foreach($post_data as $data)
-                            {
-                                echo '
-                                <tr>
-                                    <td>'.$data["b_title"].'</td>
-                                    <td>'.$data["b_description"].'</td>
-                                    <td><button class="btn-primary"><i class="bi bi-pencil-square"></i></button></td>
-                                    <td><button class="btn-danger"><i class="bi bi-trash-fill"></i></button></td>
-                                    <td></td>
-                                </tr>';
-                            }
+                            { ?>
+                        <tr>
+                            <td><?php echo $data["b_title"] ?></td>
+                            <td><?php echo $data["b_description"] ?></td>
+                            <td><button class="btn-primary"><i class="bi bi-pencil-square"></i></button></td>
+                            <td><button class="btn-danger"><i class="bi bi-trash-fill"></i></button></td>
+                            <td><?php if($data['status']==0){ echo '<h6 class="alert alert-warning">Pending</h6>';} else { echo '<h6 class="alert alert-success">Approved</h6>';} ?></td>
+                        </tr>
+                        <?php  }
 
                         ?>
                     </table>
