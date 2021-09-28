@@ -47,7 +47,7 @@ class Login extends Controller
                 
                 $session->set('id',$admin['aid']);
                 $session->set('admin',$admin['fname']);
-                return view('adminview/post');
+                return redirect()->to('admin');
             
             }else{
                 $session->set('msg','Password is incorrect.');

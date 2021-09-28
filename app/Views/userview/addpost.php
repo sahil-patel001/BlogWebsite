@@ -11,7 +11,7 @@
         </div>
         <div class="form-group mb-3">
             <label class="mb-2" for="img">Images: </label><br>
-            <input type="file" accept="image/*" name="img" class="form-control" value="" require>
+            <input type="file" accept="image/*" name="img[]" class="form-control" value="" multiple require>
         </div>
         <div class="form-group mb-3">
             <label class="mb-2 pe-3" for="description">Description: </label>

@@ -1,15 +1,16 @@
 <?php echo view('templetes/userheader'); ?>
 <br>
-<?php $session = session(); ?>
-<div class="text-success text-center"><?php echo $session->get('post'); ?></div>
-<?php $session->remove('post'); ?>
-<div class="text-danger text-center"><?php echo $session->get('err'); ?></div>
-<?php $session->remove('err'); ?>
 <br>
 <div class="container">
 
     <h2 class="text-secondary text-center mt-4 mb-4">Post Status</h2>
-<br>
+    <hr>
+    <?php $session = session(); ?>
+    <h5 class="text-success text-center"><?php echo $session->get('post'); ?></h5>
+    <?php $session->remove('post'); ?>
+    <h5 class="text-danger text-center"><?php echo $session->get('err'); ?></h5>
+    <?php $session->remove('err'); ?>
+    <br>
     <div class="card">
         <div class="card-header">
             <div class="row">
@@ -25,7 +26,7 @@
                     <table class="table table-striped table-bordered">
                         <tr>
                             <th>Title</th>
-                            <th>Image</th>
+                            <!-- <th>Image</th> -->
                             <th>Description</th>
                             <th>Edit</th>
                             <th>Delete</th>
@@ -37,10 +38,9 @@
                                 echo '
                                 <tr>
                                     <td>'.$data["b_title"].'</td>
-                                    <td>'.$data["b_image"].'</td>
                                     <td>'.$data["b_description"].'</td>
-                                    <td><button><i class="bi bi-pencil-square"></i></button></td>
-                                    <td><button><i class="bi bi-trash-fill"></i></button></td>
+                                    <td><button class="btn-primary"><i class="bi bi-pencil-square"></i></button></td>
+                                    <td><button class="btn-danger"><i class="bi bi-trash-fill"></i></button></td>
                                     <td></td>
                                 </tr>';
                             }
@@ -87,3 +87,5 @@
 }
 </style>
 <?php echo view('templetes/footer'); ?>
+<br>
+<br>

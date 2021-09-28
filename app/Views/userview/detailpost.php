@@ -3,7 +3,7 @@
 <br>
 <?php foreach($detail->getResult('array') as $data){
     $title = $data['b_title'];
-    $image = $data['b_image'];
+    // $image = $data['b_image'];
     $description = $data['b_description'];
 } ?>
 <h1 class="display-3 text-center" style="font-weight: bold; color: #32608f"><?php echo $title; ?></h1>

@@ -42,6 +42,7 @@ $routes->get('/admin/contact', 'Admin::contact');
 $routes->get('/user', 'User::index');
 $routes->get('/user/addpost', 'User::addpost');
 $routes->get('/user/poststatus', 'User::poststatus');
+$routes->get('/user/contact', 'User::contactview');
 
 
 /*
