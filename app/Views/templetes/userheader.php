@@ -11,37 +11,39 @@
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script type="text/javascript" language="javascript"
         src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <link href="/path/to/jquery.fancybox.min.css" rel="stylesheet">
+    <script src="/path/to/jquery.fancybox.min.js"></script>
     <title>Simple Blog Website</title>
 </head>
 
 <body style="background-color: #e3f2fd;">
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/user">Home</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/user/addpost">Add Post</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/poststatus">Post Status</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/contact">Contact Admin</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/logout">Logout</a>
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/user">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/user/addpost">Add Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/poststatus">Post Status</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/contact">Contact Admin</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-    </div>
+        </div>
+    </nav>

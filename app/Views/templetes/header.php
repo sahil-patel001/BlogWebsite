@@ -12,7 +12,6 @@
 </head>
 
 <body style="background-color: #e3f2fd;">
-    <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">Blog Website</a>
@@ -32,4 +31,3 @@
                 </div>
             </div>
         </nav>
-    </div>

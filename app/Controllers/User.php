@@ -16,9 +16,11 @@ class User extends Controller
     {   
         $getAll = new BlogModel();
 
-        $data['all_data'] = $getAll->where('status', 1)->paginate(10);
-
-        $data['pagination_link'] = $getAll->pager;
+        $sql = "select * from blog inner join image on blog.bid = image.bid where blog.status=1 group by image.bid order by blog.bid";
+        // $data['all_data'] = $getAll->where('status', 1)->paginate(10);
+        $data['all_data'] = $getAll->query($sql);
+        
+        // $data['pagination_link'] = $getAll->pager;
 
         return view('userview/listofpost', $data);
     }
@@ -37,18 +39,11 @@ class User extends Controller
         $getPost = new BlogModel(); 
         $getImg = new Image();
 
-        // $getImg->findAll();
-        // $getImg->from('blog');
-        // $getImg->join('image', 'image.bid = blog.bid');
-        // $getImg->where('blog.uid', $id);
-        // $data['img_data'] = $getImg->orderBy('bid')->paginate(10);
-        // $data['post_data'] = $getPost->where('uid', $id)->paginate(10);
-        // print_r($data['post_data']);
-        // die();
+        $sql = "select * from blog inner join image on blog.bid = image.bid where blog.uid='".$id."' group by image.bid order by blog.bid";
 
-        $data['post_data'] = $getPost->where('uid', $id)->orderBy('bid')->paginate(2);
-
-        $data['pagination_link'] = $getPost->pager;
+        $data['post'] = $getImg->query($sql);
+        
+        // $data['pagination_link'] = $getPost->pager;
 
         return view('userview/poststatus', $data);
     }
@@ -104,9 +99,9 @@ class User extends Controller
 
         $detail = new BlogModel();
 
-        $detail->select('*');
-        $detail->where('bid',$id);
-        $data['detail'] = $detail->get();
+        $sql = "select * from blog inner join image on blog.bid = image.bid where blog.bid='".$id."' order by blog.bid";
+
+        $data['detail'] = $detail->query($sql);
   
         return view('userview/detailpost', $data);
     }

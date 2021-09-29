@@ -30,6 +30,9 @@
                         <th>Action</th>
                     </tr>
                     <?php
+                    if(empty($pending_post)){ 
+                        echo '<br><h1 class="text-secondary text-center">No Pending Data Found</h1><br>';
+                    } else {
                             foreach($pending_post as $data)
                             { 
                                 ?>
@@ -40,13 +43,13 @@
                         <td><?php echo $data["addedBy"] ?></td>
                         <td class="d-flex">
                             <a href="admin/approve?id=<?php echo $id = $data["bid"] ?>"><button class="me-2 btn-primary"><i class="bi bi-check-lg"></i></button></a>
-                            <a href="admin/decline?id=<?php echo $id = $data["bid"] ?>"><button class="btn-danger"><i class="bi bi-x-lg"></i></button></a>
+                            <!-- <a href="admin/decline?id=<?php //echo $id = $data["bid"] ?>"><button class="btn-danger"><i class="bi bi-x-lg"></i></button></a> -->
                         </td>
                     </tr>
 
                     <?php
                             $counter++;
-                            }
+                            } }
                         ?>
                 </table>
             </div>

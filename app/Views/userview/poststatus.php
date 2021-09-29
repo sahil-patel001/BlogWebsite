@@ -25,14 +25,13 @@
                     <table class="table table-striped table-bordered">
                         <tr class="text-center">
                             <th>Title</th>
-                            <!-- <th>Image</th> -->
                             <th>Description</th>
                             <th>Edit</th>
                             <th>Delete</th>
                             <th>Status</th>
                         </tr>
                         <?php
-                            foreach($post_data as $data)
+                            foreach($post->getResult('array') as $data)
                             { ?>
                         <tr>
                             <td><?php echo $data["b_title"] ?></td>
@@ -47,16 +46,16 @@
                     </table>
             </div>
             <div>
-                <?php
+                <!-- <?php
 
-                    if($pagination_link)
-                    {
-                        $pagination_link->setPath('User/poststatus');
+                    // if($pagination_link)
+                    // {
+                    //     $pagination_link->setPath('User/poststatus');
 
-                        echo $pagination_link->links();
-                    }
+                    //     echo $pagination_link->links();
+                    // }
                     
-                    ?>
+                    ?> -->
 
             </div>
             </form>

@@ -43,6 +43,7 @@ $routes->get('/user', 'User::index');
 $routes->get('/user/addpost', 'User::addpost');
 $routes->get('/user/poststatus', 'User::poststatus');
 $routes->get('/user/contact', 'User::contactview');
+$routes->get('/index.php/user/upload/(:any)', 'public::upload');
 
 
 /*

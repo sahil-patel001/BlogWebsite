@@ -54,10 +54,10 @@ class Pages extends BaseController
         ];
 
         if($data['account'] == 'User'){
+            $session->set('account',$data['account']);
             $user = new UserModel();
 
             if($user->insert($data)){
-                // $_SESSION['success'] = "Register Successfully.";
                 $session->set('success','Register Successfully.');
 
                 return redirect()->to('/login');
@@ -70,7 +70,6 @@ class Pages extends BaseController
             $admin = new AdminModel();
 
             if($admin->insert($data)){
-                // $_SESSION['success'] = "Register Successfully.";
                 $session->set('success','Register Successfully.');
                 
                 return redirect()->to('/login');
