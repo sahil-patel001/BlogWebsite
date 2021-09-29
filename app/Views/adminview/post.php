@@ -20,11 +20,11 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
+                <table id="post" class="table table-striped table-bordered">
                     <?php $counter = 1; ?>
                     <tr class="text-center">
                         <th>No.</th>
-                        <th>Thumbnail</th>
+                        <th>Title</th>
                         <th>Description</th>
                         <th>Added By</th>
                         <th>Action</th>
@@ -42,16 +42,23 @@
                         <td><?php echo $data["b_description"] ?></td>
                         <td><?php echo $data["addedBy"] ?></td>
                         <td class="d-flex">
-                            <a href="admin/approve?id=<?php echo $id = $data["bid"] ?>"><button class="me-2 btn-primary"><i class="bi bi-check-lg"></i></button></a>
+                            <a href="admin/approve?id=<?php echo $id = $data["bid"] ?>"><button
+                                    class="me-2 btn-primary"><i class="bi bi-check-lg"></i></button></a>
                             <!-- <a href="admin/decline?id=<?php //echo $id = $data["bid"] ?>"><button class="btn-danger"><i class="bi bi-x-lg"></i></button></a> -->
                         </td>
                     </tr>
-
                     <?php
                             $counter++;
                             } }
                         ?>
                 </table>
+                <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+                <script>
+                $(document).ready(function() {
+                    $('#post').DataTable();
+                });
+                </script>
             </div>
             <div>
                 <?php

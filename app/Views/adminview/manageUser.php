@@ -41,8 +41,8 @@
                         <td><?php echo $data["email"] ?></td>
                         <td><?php echo $data["phone"] ?></td>
                         <td class="d-flex justify-content-center">
-                            <a href="fetch?id=<?php echo $data['uid'] ?>"><button class="me-2 btn-primary"><i class="bi bi-pencil-square"></i></button></a>
-                            <a href="delete?id=<?php echo $data['uid'] ?>"><button class="btn-danger" onClick="return confirm('Are you sure?')"><i class="bi bi-trash-fill"></i></button></a>
+                            <a href="fetch?id=<?php echo $data['uid'] ?>"><button class="me-2 btn btn-primary"><i class="bi bi-pencil-square"></i></button></a>
+                            <a href="delete?id=<?php echo $data['uid'] ?>"><button class="btn btn-danger" onClick="return confirm('Are you sure?')"><i class="bi bi-trash-fill"></i></button></a>
                         </td>
                     </tr>
 

@@ -42,7 +42,7 @@
                 <input type="tel" maxlength="10" value=<?php echo $data['phone']; ?> class="form-control" name="phone" id="" required>
             </div>
             <div class="col-12">
-                <button type="submit" name="" class="btn btn-primary" onclick="">Update</button>
+                <button type="submit" name="update" class="btn btn-primary" onclick="">Update</button>
             </div>
             
         </form>

@@ -36,8 +36,8 @@
                         <tr>
                             <td><?php echo $data["b_title"] ?></td>
                             <td><?php echo $data["b_description"] ?></td>
-                            <td><button class="btn-primary"><i class="bi bi-pencil-square"></i></button></td>
-                            <td><button class="btn-danger"><i class="bi bi-trash-fill"></i></button></td>
+                            <td><button class="btn btn-primary"><i class="bi bi-pencil-square"></i></button></td>
+                            <td><button class="btn btn-danger"><i class="bi bi-trash-fill"></i></button></td>
                             <td><?php if($data['status']==0){ echo '<h6 class="alert alert-warning">Pending</h6>';} else { echo '<h6 class="alert alert-success">Approved</h6>';} ?></td>
                         </tr>
                         <?php  }
