@@ -5,6 +5,7 @@ use CodeIgniter\Controller;
 use App\Models\BlogModel;
 use App\Models\Image;
 use App\Models\ContactModel;
+use App\Models\LoginModel;
 use App\Controllers\Login;
 
 
@@ -133,6 +134,72 @@ class User extends Controller
             $session->set('unsend', 'Something Went Wrong.');
             return view("userview/contact");
         }
+    }
+
+    public function edit()
+    {
+        $id = $_GET['id'];
+        $blog = new BlogModel();
+
+        $data['post'] = $blog->where('bid', $id)->findAll();
+
+        return view('userview/editblog', $data);
+    }
+
+    public function editpost()
+    {
+        $id = $_GET['id'];
+        $blog = new BlogModel();
+        $addI = new Image();
+
+        $data = [
+            'b_title' => $this->request->getvar('title'),
+            'b_description' => $this->request->getvar('description'),
+        ];
+
+        $blog->set($data)->where('bid', $id);
+
+        $imgs = $this->request->getFiles();
+        foreach($imgs['img'] as $img){
+            if(!empty($img)){
+                $dataImg = [
+                    'img' => $img->move('./upload', $img->getName()),
+                    'img' =>  $img->getName(),
+                ];
+                $addI->set($dataImg)->where('bid', $id);
+                $session = session();
+                $session->set('update','Post Edited Successfully.');
+            }
+        }  
+        //insert the data into db and show it on post status
+        return redirect()->to('user/poststatus');
+    }
+
+    public function deleteblog()
+    {
+        $id = $_GET['id'];
+        $img = new Image();
+        $blog = new BlogModel();
+
+        $img->where('bid',$id)->delete();
+        $blog->where('bid',$id)->delete();
+        $session = session();
+        $session->set('delete', 'Post Deleted Successfully.');
+        //make the query for delete and redirect to the post status view.
+        return redirect()->to('user/poststatus');
+    }
+
+    public function like($bid=0)
+    {
+        $like = new LikeModel();
+
+        $data = [
+            'uid' => $session->get('id'),
+            'bid' => $bid,
+        ];
+
+        $like->insert($data);
+        return 1;
     }
 }
 

@@ -7,8 +7,45 @@
     <div><?php echo "Hello ".$admin; ?></div>
 </h2>
 <br>
+<div class="container">
+    <hr>
+</div>
+<br>
 <br>
 <div class="container">
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>Blog Id.</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Added By</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <?php foreach($pending_post as $data){ ?>
+        <tbody>
+            <tr>
+                <td><?php echo $data['bid'] ?></td>
+                <td><?php echo $data['b_title'] ?></td>
+                <td><?php echo $data["b_description"] ?></td>
+                <td><?php echo $data["addedBy"] ?></td>
+                <td>
+                    <a href="admin/approve?id=<?php echo $id = $data["bid"] ?>"><button class="me-2 btn btn-primary"><i
+                                class="bi bi-check-lg"></i></button></a>
+                </td>
+            </tr>
+        </tbody>
+        <?php
+     } ?>
+    </table>
+</div>
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable();
+});
+</script>
+<!-- <div class="container">
 
     <div class="card">
         <div class="card-header">
@@ -20,7 +57,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table id="post" class="table table-striped table-bordered">
+                <table id="myTable" class="table table-striped table-bordered">
                     <?php $counter = 1; ?>
                     <tr class="text-center">
                         <th>No.</th>
@@ -45,7 +82,7 @@
                             <a href="admin/approve?id=<?php echo $id = $data["bid"] ?>"><button
                                     class="me-2 btn-primary"><i class="bi bi-check-lg"></i></button></a>
                             <!-- <a href="admin/decline?id=<?php //echo $id = $data["bid"] ?>"><button class="btn-danger"><i class="bi bi-x-lg"></i></button></a> -->
-                        </td>
+<!-- </td>
                     </tr>
                     <?php
                             $counter++;
@@ -53,22 +90,16 @@
                         ?>
                 </table>
                 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
-                <script>
-                $(document).ready(function() {
-                    $('#post').DataTable();
-                });
-                </script>
             </div>
             <div>
                 <?php
 
-                    if($pagination_link)
-                    {
-                        $pagination_link->setPath('Admin');
+                    // if($pagination_link)
+                    // {
+                    //     $pagination_link->setPath('Admin');
 
-                        echo $pagination_link->links();
-                    }
+                    //     echo $pagination_link->links();
+                    // }
                     
                     ?>
 
@@ -77,8 +108,13 @@
     </div>
 
 </div>
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable();
+});
+</script> -->
 
-<style>
+<!-- <style>
 .pagination li a {
     position: relative;
     display: block;
@@ -96,7 +132,7 @@
     background-color: #007bff;
     border-color: #007bff;
 }
-</style>
+</style>  -->
 <?php echo view('templetes/footer'); ?>
 <br>
 <br>

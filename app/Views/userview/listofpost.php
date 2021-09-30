@@ -25,17 +25,30 @@
                     <div class="d-flex justify-content-between">
                         <a href="user/detail?id=<?php echo $id = $data["bid"] ?>" class="btn btn-primary">Detail
                             Blog</a>
-                        <button class="btn btn-outline-primary"><i class="fa fa-thumbs-o-up"></i></button>
+                        <button class="btn btn-outline-primary likebtn" data="<?php echo $data['bid'] ?>"><i class="bi bi-heart"></i></button>
                     </div>
                 </div>
             </div>
         </div>
-        <script>
+        <!-- <script>
         $("button").click(function() {
             $(this).find("i").removeClass("fa fa-thumbs-o-up").addClass("fa fa-thumbs-up");
         });
-        </script>
+        </script> -->
         <?php } ?>
+        <script>
+            $('button').click(function(){
+                bid=$(this).attr('data');
+                $.ajax({
+                    url: '<?php echo base_url('user/like/') ?>'+bid,
+                        success:function(result){
+                            if(result==1){
+                                alert('You Liked');
+                            }
+                        }
+                })
+            })
+        </script>
     </div>
     <?php
 
@@ -50,7 +63,7 @@
 
 </div>
 </div>
-</div> -->
+</div>
 
 </div>
 <?php echo view('templetes/footer'); ?>
