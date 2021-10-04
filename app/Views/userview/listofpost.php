@@ -26,22 +26,23 @@
                     <p>By - <?php echo $data['fname'] ?></p>
                     <p class="card-text">For getting more information about this blog, Please click on the button
                         given below.</p>
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between" style="margin-bottom: 10px">
                         <a href="user/detail?id=<?php echo $id = $data["bid"] ?>" class="btn btn-primary">Detail
                             Blog</a>
-                        <a href="user/like?id=<?php echo $id = $data["bid"] ?>"><?php if($data['islike'] == 'Yes') { ?><button class="btn btn-outline-danger" data="<?php echo $data['bid'] ?>"><i
-                                class="bi bi-heart-fill"></i></button><?php } else { ?><button class="btn btn-outline-primary likebtn" data="<?php echo $data['bid'] ?>"><i
-                                class="bi bi-heart"></i></button><?php } ?></a>
+                        <a href="user/like?id=<?php echo $id = $data["bid"] ?>"><?php if($data['islike'] == 'Yes') { ?><button
+                                class="btn btn-outline-danger" data="<?php echo $data['bid'] ?>"><i
+                                    class="bi bi-heart-fill"></i></button><?php } else { ?><button
+                                class="btn btn-outline-primary likebtn" data="<?php echo $data['bid'] ?>"><i
+                                    class="bi bi-heart"></i></button><?php } ?></a>
+
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        Total Likes: <?php  ?>
                     </div>
                 </div>
             </div>
         </div>
         <?php } ?>
-        <script>
-        $('button').click(function() {
-            
-        })
-        </script>
     </div>
 </div>
 </div>
