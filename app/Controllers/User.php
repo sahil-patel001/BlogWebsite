@@ -3,7 +3,9 @@
 namespace App\Controllers;
 use CodeIgniter\Controller;
 use App\Models\BlogModel;
+use App\Models\UserModel;
 use App\Models\Image;
+use App\Models\LikeModel;
 use App\Models\ContactModel;
 use App\Models\LoginModel;
 use App\Controllers\Login;
@@ -11,13 +13,13 @@ use App\Controllers\Login;
 
 class User extends Controller
 {
-    public $CI = NULL;
-
     public function index()
-    {   
+    { 
+        $session = session();
         $getAll = new BlogModel();
 
-        $sql = "select * from blog inner join image on blog.bid = image.bid where blog.status=1 group by image.bid order by blog.bid";
+        $sql = "select *,blog_post.bid,blog_post.uid,IF(count(blog_likebtn.likeid)>0, 'Yes' ,'No') as islike from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid left join blog_likebtn on blog_post.bid = blog_likebtn.bid and blog_likebtn.uid='".$session->get('id')."' where blog_post.status='approved' group by blog_image.bid order by blog_post.created desc";
+
         // $data['all_data'] = $getAll->where('status', 1)->paginate(10);
         $data['all_data'] = $getAll->query($sql);
         
@@ -40,7 +42,7 @@ class User extends Controller
         $getPost = new BlogModel(); 
         $getImg = new Image();
 
-        $sql = "select * from blog inner join image on blog.bid = image.bid where blog.uid='".$id."' group by image.bid order by blog.bid";
+        $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid where blog_post.uid='".$id."' group by blog_image.bid order by blog_post.created desc";
 
         $data['post'] = $getImg->query($sql);
         
@@ -60,10 +62,10 @@ class User extends Controller
             'uid' => $session->get('id'),
             'b_title' => $this->request->getVar('title'),
             'b_description' => $this->request->getVar('description'),
-            'addedBy' => $session->get('user')
+            'created' => date('Y-m-d H:i:s'),
         ];
 
-        $post = new BlogModel();
+        $post = new BlogModel();    
 
         $post->insert($data);
 
@@ -78,6 +80,7 @@ class User extends Controller
                 'img' => $img->move('./upload', $img->getName()),
                 'img' =>  $img->getName(),
                 'bid' => $id,
+                'created' => date('Y-m-d H:i:s'),
             ];
             $addImg->insert($dataImg);
         }     
@@ -100,7 +103,7 @@ class User extends Controller
 
         $detail = new BlogModel();
 
-        $sql = "select * from blog inner join image on blog.bid = image.bid where blog.bid='".$id."' order by blog.bid";
+        $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid where blog_post.bid='".$id."' order by blog_post.bid";
 
         $data['detail'] = $detail->query($sql);
   
@@ -122,7 +125,7 @@ class User extends Controller
         $data = [
             "subject" => $this->request->getVar('subject'),
             "message" => $this->request->getVar('message'),
-            "sendBy" => $name,
+            'created' => date('Y-m-d H:i:s'),
         ];
 
         if($contact->insert($data))
@@ -155,9 +158,12 @@ class User extends Controller
         $data = [
             'b_title' => $this->request->getvar('title'),
             'b_description' => $this->request->getvar('description'),
+            'updated' => date('Y-m-d H:i:s'),
         ];
 
-        $blog->set($data)->where('bid', $id);
+        $sql = "update blog_post SET b_title='".$data['b_title']."', b_description='".$data['b_description']."', updated='".$data['updated']."' where bid='".$id."'";
+
+        $blog->query($sql);
 
         $imgs = $this->request->getFiles();
         foreach($imgs['img'] as $img){
@@ -165,41 +171,129 @@ class User extends Controller
                 $dataImg = [
                     'img' => $img->move('./upload', $img->getName()),
                     'img' =>  $img->getName(),
+                    'updated' => date('Y-m-d H:i:s'),
                 ];
-                $addI->set($dataImg)->where('bid', $id);
-                $session = session();
-                $session->set('update','Post Edited Successfully.');
+                $sql1 = "update blog_image SET img = '".$dataImg['img']."', updated='".$dataImg['updated']."' where bid='".$id."'";
+                $addI->query($sql1);
             }
         }  
+        $session = session();
+        $session->set('update','Post Edited Successfully.');
         //insert the data into db and show it on post status
         return redirect()->to('user/poststatus');
     }
 
-    public function deleteblog()
+    public function delete()
     {
         $id = $_GET['id'];
         $img = new Image();
         $blog = new BlogModel();
 
-        $img->where('bid',$id)->delete();
-        $blog->where('bid',$id)->delete();
-        $session = session();
-        $session->set('delete', 'Post Deleted Successfully.');
-        //make the query for delete and redirect to the post status view.
-        return redirect()->to('user/poststatus');
+        $sql = "delete from blog_post where bid='".$id."'";
+        $sql1 = "delete from blog_image where bid='".$id."'";
+        if($img->query($sql1) && $blog->query($sql)) {
+            $session = session();
+            $session->set('delete', 'Post Deleted Successfully.');
+            //make the query for delete and redirect to the post status view.
+            return redirect()->to('user/poststatus');
+        }
     }
 
-    public function like($bid=0)
+    public function like()
     {
         $like = new LikeModel();
+        $session = session();
+        $bid = $_GET['id'];
+        $uid = $session->get('id');
+        
+        $sql = "select action from blog_likebtn where uid='".$uid."' and bid='".$bid."'";
+        if(empty($like->query($sql)->getRow())){
+            $sql1 = "insert into blog_likebtn(uid, bid) values('".$uid."', '".$bid."')"; 
+            $like->query($sql1);
+        } else {
+            $like->where('bid',$bid)->where('uid',$uid)->delete();
+        }
+        return redirect()->to('user');
+        die();
+    }
+
+    public function profile()
+    {
+        $session = session();
+        $id = $session->get('id');
+        $user = new UserModel();
+        $data['user'] = $user->where('uid',$id)->get();
+        return view('userview/profile', $data);
+    }
+
+     public function update()
+    {
+        $id = $_GET['id'];
 
         $data = [
-            'uid' => $session->get('id'),
-            'bid' => $bid,
+            'fname' => $this->request->getVar('fname'),
+            'lname' => $this->request->getVar('lname'),
+            'password' => $this->request->getVar('password'),
+            'phone' => $this->request->getVar('phone'),
         ];
 
-        $like->insert($data);
-        return 1;
+        $user = new UserModel();
+
+        $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', password='".$data['password']."', phone='".$data['phone']."' where uid='".$id."'";
+        if($user->query($sql)){
+            $session = session();
+            $session->set('update','Update Successfully.');
+
+            return redirect()->to('/User/profile');
+
+        } else {
+            var_dump($user->errors());
+        }
+    
+    }
+
+    public function addedBy()
+    {
+        $uid = $_GET['id'];
+        $user = new UserModel();
+    }
+
+    public function password()
+    {
+        return view('userview/password');
+    }
+
+    public function changePassword()
+    {
+        $id = $_GET['id'];
+        $user = new UserModel();
+
+        $data = [
+            'current' => md5($this->request->getVar('current')),
+            'new' => $this->request->getVar('new'),
+            'confirm' => $this->request->getVar('confirm'),
+        ];
+
+        $sql = "select password from user where uid = '".$id."'";
+
+        $old = $user->query($sql)->getRow();
+        $session = session();
+
+        if($old->password == $data['current']){
+            if($data['new'] == $data['confirm']) {
+                $password = md5($data['new']);
+                $sql = "update user SET password='".$password."' updated='".date('Y-m-d H:i:s')."' where uid='".$id."'";
+                $user->query($sql);
+                $session->set('change', 'Your password is changed successfully.');
+                return redirect()->to('user/profile');
+            } else {
+                $session->set('new', 'confirm password didn\'t match');
+                return redirect()->to('user/password');
+            }
+        } else {
+            $session->set('match', 'current password is wrong');
+            return redirect()->to('user/password');
+        }
     }
 }
 

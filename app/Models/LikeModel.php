@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class AdminModel extends Model
+class LikeModel extends Model
 {
-    protected $table      = 'likebtn';
+    protected $table      = 'blog_likebtn';
     // protected $primaryKey = 'aid';
 
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['uid','bid'];
+    protected $allowedFields = ['uid','bid','action'];
 
     protected $useTimestamps = false;
 

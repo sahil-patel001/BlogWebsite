@@ -5,8 +5,6 @@ use CodeIgniter\Controller;
 use App\Models\UserModel;
 use App\Models\AdminModel;
 
-
-
 class Login extends Controller
 {
     public function loginAuth(){
@@ -16,9 +14,9 @@ class Login extends Controller
         $adminModel = new AdminModel();
 
         $email = $this->request->getVar('email');
-        $password = $this->request->getVar('password');   
+        $password = md5($this->request->getVar('password'));
         
-        $user = $userModel->where('email', $email)->first();
+        $user = $userModel->where('email', $email)->first();    
         $admin = $adminModel->where('email', $email)->first();
         
         if(!empty($user)){

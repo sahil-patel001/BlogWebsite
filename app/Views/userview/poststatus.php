@@ -43,10 +43,10 @@
                             <td><?php echo $data["b_description"] ?></td>
                             <td><a href="edit?id=<?php echo $data['bid'] ?>" class="btn btn-primary"><i
                                         class="bi bi-pencil-square"></i></a></td>
-                            <td><a href="deleteblog?id=<?php echo $data['bid'] ?>"><button class="btn btn-danger"
+                            <td><a href="delete?id=<?php echo $data['bid'] ?>"><button class="btn btn-danger"
                                         onClick="return confirm('Are you sure?')"><i
                                             class="bi bi-trash-fill"></i></button></a></td>
-                            <td><?php if($data['status']==0){ echo '<h6 class="alert alert-warning">Pending</h6>';} else { echo '<h6 class="alert alert-success">Approved</h6>';} ?>
+                            <td><?php if($data['status']=='pending'){ echo '<h6 class="alert alert-warning">Pending</h6>';} elseif($data['status']=='rejected') { echo '<h6 class="alert alert-danger">Rejected</h6>';} else {echo '<h6 class="alert alert-success">Approved</h6>';};?>
                             </td>
                         </tr>
                         <?php  }
@@ -54,44 +54,11 @@
                         ?>
                     </table>
             </div>
-            <div>
-                <!-- <?php
-
-                    // if($pagination_link)
-                    // {
-                    //     $pagination_link->setPath('User/poststatus');
-
-                    //     echo $pagination_link->links();
-                    // }
-                    
-                    ?> -->
-
-            </div>
             </form>
         </div>
     </div>
 
 </div>
-
-<style>
-.pagination li a {
-    position: relative;
-    display: block;
-    padding: .5rem .75rem;
-    margin-left: -1px;
-    line-height: 1.25;
-    color: #007bff;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-}
-
-.pagination li.active a {
-    z-index: 1;
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-</style>
 <?php echo view('templetes/footer'); ?>
 <br>
 <br>

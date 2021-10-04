@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class UserModel extends Model
 {
-    protected $table      = 'signup_user';
+    protected $table      = 'user';
     protected $primaryKey = 'uid';
 
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['fname', 'lname', 'email', 'password', 'phone'];
+    protected $allowedFields = ['fname', 'lname', 'email', 'password', 'phone','created','updated'];
 
     protected $useTimestamps = false;
 

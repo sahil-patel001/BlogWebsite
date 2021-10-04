@@ -16,51 +16,33 @@
         <div class="card ms-5 mb-5 me-5" style="width: 18rem;">
             <div style="height: 100%">
                 <div>
-                    <img src="<?php echo $imgURL; ?>" class="card-img-top">
+                    <img style="height: 262px; weight: 262px; object-fit: cover;" src="<?php echo $imgURL; ?>"
+                        class="card-img-top">
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title"><?php echo $data['b_title']; ?></h5>
-                    <p class="card-text">For getting more information about this blog, Please click on the button given
-                        below.</p>
+                    <div style="height: 55px">
+                        <h5 class="card-title"><?php echo $data['b_title']; ?></h5>
+                    </div>
+                    <p>By - <?php echo $data['fname'] ?></p>
+                    <p class="card-text">For getting more information about this blog, Please click on the button
+                        given below.</p>
                     <div class="d-flex justify-content-between">
                         <a href="user/detail?id=<?php echo $id = $data["bid"] ?>" class="btn btn-primary">Detail
                             Blog</a>
-                        <button class="btn btn-outline-primary likebtn" data="<?php echo $data['bid'] ?>"><i class="bi bi-heart"></i></button>
+                        <a href="user/like?id=<?php echo $id = $data["bid"] ?>"><?php if($data['islike'] == 'Yes') { ?><button class="btn btn-outline-danger" data="<?php echo $data['bid'] ?>"><i
+                                class="bi bi-heart-fill"></i></button><?php } else { ?><button class="btn btn-outline-primary likebtn" data="<?php echo $data['bid'] ?>"><i
+                                class="bi bi-heart"></i></button><?php } ?></a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- <script>
-        $("button").click(function() {
-            $(this).find("i").removeClass("fa fa-thumbs-o-up").addClass("fa fa-thumbs-up");
-        });
-        </script> -->
         <?php } ?>
         <script>
-            $('button').click(function(){
-                bid=$(this).attr('data');
-                $.ajax({
-                    url: '<?php echo base_url('user/like/') ?>'+bid,
-                        success:function(result){
-                            if(result==1){
-                                alert('You Liked');
-                            }
-                        }
-                })
-            })
+        $('button').click(function() {
+            
+        })
         </script>
     </div>
-    <?php
-
-                    // if($pagination_link)
-                    // {
-                    //     $pagination_link->setPath('User');
-
-                    //     echo $pagination_link->links();
-                    // }
-                    
-                    ?>
-
 </div>
 </div>
 </div>

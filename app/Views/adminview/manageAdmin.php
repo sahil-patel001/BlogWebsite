@@ -1,7 +1,7 @@
 <?php echo view('templetes/adminheader'); ?>
 <br>
 <div class="container">
-    <h2 class="text-secondary text-center mt-4 mb-4">Manage User</h2>
+    <h2 class="text-secondary text-center mt-4 mb-4">Manage Admin</h2>
     <hr>
     <?php $session = session(); ?>
     <?php if(isset($session)) { ?>
@@ -16,7 +16,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row">
-                <div class="col">List Of All Users</div>
+                <div class="col">List Of All Admins</div>
                 <div class="col text-right">
                 </div>
             </div>
@@ -25,28 +25,28 @@
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <tr>
-                        <th>User ID</th>
+                        <th>Admin ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Action</th>
                     </tr>
                     <?php
-                    if(empty($all_user)){
+                    if(empty($all_admin)){
                         echo "<h5 class='alert alert-secondary'>No Data Found.</h5>";
                     } else {
-                        foreach($all_user as $data)
-                        { 
+                        foreach($all_admin as $data)
+                        {
                             ?>
                     <tr>
-                        <td><?php echo $data['uid'] ?></td>
+                        <td><?php echo $data['aid'] ?></td>
                         <td><?php echo $data["fname"] . ' ' . $data["lname"] ?></td>
                         <td><?php echo $data["email"] ?></td>
                         <td><?php echo $data["phone"] ?></td>
                         <td class="d-flex justify-content-center">
-                            <a href="fetchuser?id=<?php echo $data['uid'] ?>"><button class="me-2 btn btn-primary"><i
+                            <a href="fetchadmin?id=<?php echo $data['aid'] ?>"><button class="me-2 btn btn-primary"><i
                                         class="bi bi-pencil-square"></i></button></a>
-                            <a href="deleteuser?id=<?php echo $data['uid'] ?>"><button class="btn btn-danger"
+                            <a href="deleteadmin?id=<?php echo $data['aid'] ?>"><button class="btn btn-danger"
                                     onClick="return confirm('Are you sure?')"><i
                                         class="bi bi-trash-fill"></i></button></a>
                         </td>
@@ -64,7 +64,7 @@
 
                     if($pagination_link)
                     {
-                        $pagination_link->setPath('Admin/userManagement');
+                        $pagination_link->setPath('Admin/adminManagement');
 
                         echo $pagination_link->links();
                     }
@@ -76,7 +76,7 @@
     </div>
     <br>
     <br>
-    <a href="<?php echo site_url('admin/addUser'); ?>"><button class="btn btn-primary">Add User</button></a>
+    <a href="<?php echo base_url('admin/addAdmin'); ?>"><button class="btn btn-primary">Add Admin</button></a>
 
 </div>
 <br>

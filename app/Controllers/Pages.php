@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-// session_start();
-
 use App\Models\UserModel;
 use App\Models\AdminModel;
 
@@ -36,6 +34,7 @@ class Pages extends BaseController
         $session->remove('user');
         $session->remove('admin');
         $session->remove('success');
+        $session->remove('add');
 
         return view('pages/login');
     }
@@ -48,9 +47,10 @@ class Pages extends BaseController
             'fname' => $this->request->getVar('fname'),
             'lname' => $this->request->getVar('lname'),
             'email' => $this->request->getVar('email'),
-            'password' => $this->request->getVar('password'),
+            'password' => md5($this->request->getVar('password')),
             'account' => $this->request->getVar('account'),
             'phone' => $this->request->getVar('phone'),
+            'created' => date('Y-m-d H:i:s'),
         ];
 
         if($data['account'] == 'User'){
@@ -60,7 +60,12 @@ class Pages extends BaseController
             if($user->insert($data)){
                 $session->set('success','Register Successfully.');
 
+                if($session->get('add') ){
+                    return redirect()->to('admin/management');  
+                } else{
+
                 return redirect()->to('/login');
+                }
 
             } else {
                 var_dump($admin->errors());
@@ -71,8 +76,13 @@ class Pages extends BaseController
 
             if($admin->insert($data)){
                 $session->set('success','Register Successfully.');
+
+                if($session->get('add') ){
+                    return redirect()->to('admin/management');  
+                } else{
                 
                 return redirect()->to('/login');
+                }
 
             } else {
                 var_dump($admin->errors());

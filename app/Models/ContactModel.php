@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class ContactModel extends Model
 {
-    protected $table      = 'contact';
+    protected $table      = 'user_contact';
     protected $primaryKey = 'cid';
 
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['cid','subject','message','sendBy'];
+    protected $allowedFields = ['cid','subject','message','sendBy','created','updated'];
 
     protected $useTimestamps = false;
 

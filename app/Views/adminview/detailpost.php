@@ -1,4 +1,4 @@
-<?php echo view('templetes/userheader'); ?>
+<?php echo view('templetes/adminheader'); ?>
 <br>
 <br>
 <?php foreach($detail->getResult('array') as $data){
@@ -33,12 +33,30 @@
 <div class="container">
     <h4 class="text-muted">Added By</h4>
 </div>
+<br>
 <div class="container">
     <p style="font-size: 18px; color: #000000"><?php echo $user; ?></p>
 </div>
 <br>
-<div class="container d-flex">
-    <a href="/user"><button class="btn-lg btn-primary"><i class="bi bi-arrow-left-circle-fill"></i></button></a>
+<div class="container d-flex justify-content-between">
+    <div>
+        <a href="/admin"><button class="btn-lg btn-primary"><i class="bi bi-arrow-left-circle-fill"></i></button></a>
+    </div>
+    <div>
+        <?php if($data['status']=='pending') { ?>
+        <a href="approve?id=<?php echo $id = $data["bid"] ?>"><button class="me-2 btn btn-primary"><i
+                    class="bi bi-check-lg"></i></button></a>
+        <a href="decline?id=<?php echo $id = $data["bid"] ?>"><button class="me-2 btn btn-danger"><i
+                    class="bi bi-x-lg"></i></button></a>
+        <?php } else { 
+            if($data['status']=='rejected') { 
+                echo '<div class="alert alert-danger">'.$data['status'].'</div>';
+            } else {
+                echo '<div class="alert alert-success">'.$data['status'].'</div>';
+            }
+        }?>
+
+    </div>
 </div>
 <br>
 <br>

@@ -12,14 +12,14 @@ class Admin extends Controller
     public function index()
     {
         $post = new BlogModel();
-        $data['pending_post'] = $post->where('status',0)->orderBy('bid')->paginate(5);
+        $data['pending_post'] = $post->orderBy('bid','desc')->paginate(5);
 
         $data['pagination_link'] = $post->pager;
 
         return view('adminview/post', $data);
     }
 
-    public function management()
+    public function userManagement()
     {
         $user = new UserModel();
         $data['all_user'] = $user->paginate(10);
@@ -27,6 +27,18 @@ class Admin extends Controller
         $data['pagination_link'] = $user->pager;
 
         return view('adminview/manageUser', $data);
+    }
+
+    public function adminManagement()
+    {
+        $session = session();
+        $aid = $session->get('id');
+        $admin = new AdminModel();
+        $data['all_admin'] = $admin->where('aid !=',$aid)->paginate(10);
+
+        $data['pagination_link'] = $admin->pager;
+
+        return view('adminview/manageAdmin', $data);
     }
 
     public function contact()
@@ -44,7 +56,7 @@ class Admin extends Controller
         $approve = new BlogModel();
         $id = $_GET['id'];
 
-        $sql = "update blog SET status='1' where bid='".$id."'";
+        $sql = "update blog_post SET status='approved' where bid='".$id."'";
         $query=$approve->query($sql);
 
         return redirect()->to("/admin");
@@ -52,10 +64,16 @@ class Admin extends Controller
 
     public function decline()
     {
+        $decline = new BlogModel();
+        $id = $_GET['id'];
 
+        $sql = "update blog_post SET status='rejected' where bid='".$id."'";
+        $query=$decline->query($sql);
+
+        return redirect()->to("/admin");
     }
 
-    public function fetch()
+    public function fetchuser()
     {
         $user = new UserModel();
         $id = $_GET['id'];
@@ -64,7 +82,7 @@ class Admin extends Controller
         return view('adminview/editUser', $data);
     }
 
-    public function edit()
+    public function editUser()
     {
         $id = $_GET['id'];
 
@@ -72,51 +90,87 @@ class Admin extends Controller
             'fname' => $this->request->getVar('fname'),
             'lname' => $this->request->getVar('lname'),
             'email' => $this->request->getVar('email'),
-            'account' => $this->request->getVar('account'),
             'phone' => $this->request->getVar('phone'),
+            'updated' => date('Y-m-d H:i:s'),
         ];
 
-        if($data['account'] == 'User'){
-            $user = new UserModel();
+        $user = new UserModel();
 
-            $sql = "update signup_user SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."' where uid='".$id."'";
-            if($user->query($sql)){
-                $session = session();
-                $session->set('success','Update Successfully.');
+        $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where uid='".$id."'";
+        if($user->query($sql)){
+            $session = session();
+            $session->set('success','Update Successfully.');
 
-                return redirect()->to('/admin/management');
+            return redirect()->to('/admin/userManagement');
 
-            } else {
-                var_dump($user->errors());
-            } 
-        } elseif($data['account'] == 'Admin'){
-
-            $admin = new AdminModel();
-
-            if($admin->insert($data)){
-                $session = session();
-                $session->set('success','Update Successfully.');
-                //TODO: ask that what should do with user if it will become admin
-                return redirect()->to('/admin/management');
-
-            } else {
-                var_dump($admin->errors());
-            } 
-        }
+        } else {
+            var_dump($user->errors());
+        } 
+        
     }
 
-    public function delete()
+    public function editAdmin()
+    {
+        $id = $_GET['id'];
+
+        $data = [
+            'fname' => $this->request->getVar('fname'),
+            'lname' => $this->request->getVar('lname'),
+            'email' => $this->request->getVar('email'),
+            'phone' => $this->request->getVar('phone'),
+            'updated' => date('Y-m-d H:i:s'),
+        ];
+
+        $admin = new AdminModel();
+
+        $sql = "update admin SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where aid='".$id."'";
+        if($admin->query($sql)){
+            $session = session();
+            $session->set('success','Update Successfully.');
+
+            return redirect()->to('/admin/adminManagement');
+
+        } else {
+            var_dump($admin->errors());
+        } 
+    }
+
+    public function deleteuser()
     {
         $id = $_GET['id'];
         $user = new UserModel();
 
-        $sql = "delete from signup_user where uid='".$id."'";
+        $sql = "delete from user where uid='".$id."'";
         if($user->query($sql))
         {
             $session = session();
             $session->set('delete','Deleted Successfully.');
 
-            return redirect()->to('/admin/management');
+            return redirect()->to('/admin/userManagement');
+        }
+    }
+
+    public function fetchadmin()
+    {
+        $admin = new AdminModel();
+        $id = $_GET['id'];
+        $data['admin'] = $admin->where('aid', $id)->findAll();
+
+        return view('adminview/editAdmin', $data);
+    }
+
+    public function deleteadmin()
+    {
+        $id = $_GET['id'];
+        $admin = new AdminModel();
+
+        $sql = "delete from admin where aid='".$id."'";
+        if($admin->query($sql))
+        {
+            $session = session();
+            $session->set('delete','Deleted Successfully.');
+
+            return redirect()->to('/admin/adminManagement');
         }
     }
 
@@ -125,11 +179,34 @@ class Admin extends Controller
         $id = $_GET['id'];
         $detail = new ContactModel();
 
-        $sql = "select * from contact where cid='".$id."'";
+        $sql = "select * from user_contact where cid='".$id."'";
 
         $data['detail'] = $detail->query($sql);
         
         return view('adminview/detail', $data);
+    }
+
+    public function addUser()
+    {
+        return view('adminview/addUser');
+    }
+
+    public function addAdmin()
+    {
+        return view('adminview/addAdmin');
+    }
+
+    public function detailpost()
+    {
+        $id = $_GET['id'];
+
+        $detail = new BlogModel();
+
+        $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid where blog_post.bid='".$id."' order by blog_post.bid";
+
+        $data['detail'] = $detail->query($sql);
+  
+        return view('adminview/detailpost', $data);
     }
 }
 

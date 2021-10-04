@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class AdminModel extends Model
 {
-    protected $table      = 'signup_admin';
+    protected $table      = 'admin';
     protected $primaryKey = 'aid';
 
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['fname', 'lname', 'email', 'password', 'phone'];
+    protected $allowedFields = ['fname', 'lname', 'email', 'password', 'phone','created','updated'];
 
     protected $useTimestamps = false;
 
