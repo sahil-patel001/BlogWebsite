@@ -17,14 +17,17 @@ class User extends Controller
     { 
         $session = session();
         $getAll = new BlogModel();
+        $like = new LikeModel();
 
-        $sql = "select *,blog_post.bid,blog_post.uid,IF(count(blog_likebtn.likeid)>0, 'Yes' ,'No') as islike from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid left join blog_likebtn on blog_post.bid = blog_likebtn.bid and blog_likebtn.uid='".$session->get('id')."' where blog_post.status='approved' group by blog_image.bid order by blog_post.created desc";
-
-        // $data['all_data'] = $getAll->where('status', 1)->paginate(10);
+        $sql = "SELECT *,blog_post.bid,blog_post.uid,COUNT(totallike.likeid) AS total, IF(COUNT(likebtn.likeid)>0, 'Yes', 'No') AS islike FROM blog_post INNER JOIN blog_image ON blog_post.bid = blog_image.bid INNER JOIN user ON blog_post.uid = user.uid LEFT JOIN blog_likebtn AS totallike ON totallike.bid=blog_post.bid LEFT JOIN blog_likebtn AS likebtn ON likebtn.bid=blog_post.bid AND likebtn.uid=".$session->get('id')." WHERE blog_post.status='approved' GROUP BY totallike.bid,blog_image.bid ORDER BY blog_post.created DESC";
+        // $sql = "select *,blog_post.bid,blog_post.uid,count(blog_likebtn.likeid) as total,IF(count(blog_likebtn.likeid)>0, 'Yes' ,'No') as islike from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid left join blog_likebtn on blog_post.bid=blog_likebtn.bid and blog_post.bid = blog_image.bid and blog_likebtn.uid='".$session->get('id')."' where blog_post.status='approved' group by blog_image.bid,blog_likebtn.bid order by blog_post.created desc";
+        print_r($sql);
+        die();
         $data['all_data'] = $getAll->query($sql);
-        
-        // $data['pagination_link'] = $getAll->pager;
 
+        // print_r($data['all_data']);
+        // die();
+        
         return view('userview/listofpost', $data);
     }
 
@@ -45,8 +48,6 @@ class User extends Controller
         $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid where blog_post.uid='".$id."' group by blog_image.bid order by blog_post.created desc";
 
         $data['post'] = $getImg->query($sql);
-        
-        // $data['pagination_link'] = $getPost->pager;
 
         return view('userview/poststatus', $data);
     }
@@ -143,8 +144,10 @@ class User extends Controller
     {
         $id = $_GET['id'];
         $blog = new BlogModel();
+        $img = new Image();
 
         $data['post'] = $blog->where('bid', $id)->findAll();
+        $data['img'] = $img->where('bid', $id)->findAll();
 
         return view('userview/editblog', $data);
     }

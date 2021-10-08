@@ -18,6 +18,8 @@
         </div>
         <div class="form-group mb-3">
             <label class="mb-2" for="img">Images: </label><br>
+            <?php $imgURL = base_url('./upload').'/'.$img['img']; ?>
+            <img src="<?php echo $imgURL ?>" alt="">
             <input type="file" accept="image/*" name="img[]" class="form-control" value="" multiple>
         </div>
         <div class="form-group mb-3">
