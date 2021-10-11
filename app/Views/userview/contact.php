@@ -16,20 +16,43 @@ $session->remove('send'); ?>
 <?php } 
 $session->remove('unsend'); ?>
 <div class="col-lg-6 m-auto">
-    <form action="<?php echo site_url("User/contact"); ?>" method="post" enctype='multipart/form-data'>
+    <form id="contact" enctype='multipart/form-data'>
         <div class="form-group mb-3">
-            <label class="mb-2" for="subject">Subject:</label>
+            <label class="mb-2" for="subject">Subject:</label><span id="error_subject" class="text-danget ms-5"></span>
             <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject Title" required>
         </div>
         <div class="form-group mb-3">
-            <label class="mb-2 pe-3" for="message">Message: </label>
+            <label class="mb-2 pe-3" for="message">Message: </label><span id="error_message"
+                class="text-danget ms-5"></span>
             <small class="form-text text-muted">( Enter Your Message Here )</small>
             <textarea type="text" minlength="10" maxlength="1000" rows="10" class="form-control" name="message"
                 id="message" required></textarea>
         </div>
-        <button type="submit" name="send" class="btn btn-primary">Send</button>
+        <button type="submit" id="send" name="send" class="btn btn-primary">Send</button>
     </form>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $(document).on('click', '#send', function() {
+            var data = {
+                'subject': $('#subject').val(),
+                'message': $('#message').val(),
+            }
+            $.ajax({
+                method: "POST",
+                url: "<?php echo base_url('User/contact') ?>",
+                data: data,
+                success: function(response) {
+                    $('#contact').find('input').val('');
+                },
+                failure: function(response) {
+                    alert(response.d);
+                }
+            });
+    })
+})
+</script>
 <?php echo view('templetes/footer'); ?>
 <br>
 <br>

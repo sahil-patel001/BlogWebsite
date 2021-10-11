@@ -21,8 +21,8 @@ class User extends Controller
 
         $sql = "SELECT *,blog_post.bid,blog_post.uid,COUNT(totallike.likeid) AS total, IF(COUNT(likebtn.likeid)>0, 'Yes', 'No') AS islike FROM blog_post INNER JOIN blog_image ON blog_post.bid = blog_image.bid INNER JOIN user ON blog_post.uid = user.uid LEFT JOIN blog_likebtn AS totallike ON totallike.bid=blog_post.bid LEFT JOIN blog_likebtn AS likebtn ON likebtn.bid=blog_post.bid AND likebtn.uid=".$session->get('id')." WHERE blog_post.status='approved' GROUP BY totallike.bid,blog_image.bid ORDER BY blog_post.created DESC";
         // $sql = "select *,blog_post.bid,blog_post.uid,count(blog_likebtn.likeid) as total,IF(count(blog_likebtn.likeid)>0, 'Yes' ,'No') as islike from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid left join blog_likebtn on blog_post.bid=blog_likebtn.bid and blog_post.bid = blog_image.bid and blog_likebtn.uid='".$session->get('id')."' where blog_post.status='approved' group by blog_image.bid,blog_likebtn.bid order by blog_post.created desc";
-        print_r($sql);
-        die();
+        // print_r($sql);
+        // die();
         $data['all_data'] = $getAll->query($sql);
 
         // print_r($data['all_data']);
@@ -52,6 +52,36 @@ class User extends Controller
         return view('userview/poststatus', $data);
     }
 
+    // public function upload_image()
+    // {
+    //     $config = array(
+    //         'upload_path' => FCPATH . 'assets/images/',
+    //         'allowed_types' => "jpeg|jpg|png",
+    //     );
+
+    //     $this->load->library('upload');
+    //     $this->upload->initialize($config);
+    //     if($this->upload->do_upload('img')) {
+    //         $data = $this->upload->data();
+
+    //         $config2 = array(
+    //             'image_library' => "gd2",
+    //             'source_image' => FCPATH . 'assets/images/'.$data['file_name'],
+    //             'width' => 100,
+    //             'height' => 100,
+    //             'new_image' => FCPATH . 'assets/thumbs/'.'thumb'. $data['file_name'],
+    //         );
+
+    //         $this->load->library('image_lib');
+    //         $this->image_lib->initialize($config2);
+    //         $this->image_lib->resize();
+    //         $this->image_lib->clear();
+
+    //         $arr_data['img'] = $data['file_name'];
+    //         $result = $this->Image->update_image($arr_data);
+    //     }
+    // }
+
     public function save() 
     {
         $session = session();
@@ -77,6 +107,24 @@ class User extends Controller
         $imgs = $this->request->getFiles();
         
         foreach($imgs['img'] as $img){
+            // $dataThub = array(
+            //     'image_library' => "gd2",
+            //     'create_thumb' => TRUE,
+            //     'maintain_ratio' => TRUE,
+            //     'width' => 100,
+            //     'height' => 100,
+            //     'img' => $img->move('./thumb',$img->getName()),
+            // );
+            // $this->load->library('image_lib');
+            // $this->image_lib->initialize($config2);
+            // $this->image_lib->resize();
+            // $this->image_lib->clear();
+
+            //  $image = \Config\Services::image()
+            //   ->withFile($img)
+            //   ->resize(100, 100, true, 'height')
+            //   ->save(FCPATH .'/thumb/'. $img->getRandomName());
+            
             $dataImg = [
                 'img' => $img->move('./upload', $img->getName()),
                 'img' =>  $img->getName(),
@@ -97,6 +145,11 @@ class User extends Controller
             return view('userview/addpost');
         }
     }
+
+    // public function tp()
+    // {
+    //     return view('info');
+    // }
 
     public function detail()
     {
@@ -124,19 +177,27 @@ class User extends Controller
         $contact = new ContactModel();
 
         $data = [
-            "subject" => $this->request->getVar('subject'),
-            "message" => $this->request->getVar('message'),
+            "subject" => $this->request->getPost('subject'),
+            "message" => $this->request->getPost('message'),
             'created' => date('Y-m-d H:i:s'),
         ];
 
-        if($contact->insert($data))
+        if(empty($data['subject']) || empty($data['message']))
         {
-            $session->set('send', 'Message Send Successfully.');
-            return view("userview/contact");
-        } else 
-        {
-            $session->set('unsend', 'Something Went Wrong.');
-            return view("userview/contact");
+            return false;
+        } else {
+
+            if($contact->insert($data))
+            {
+                // $data = ['send'=>'Message Send Successfully.'];
+                // $session->set('send', 'Message Send Successfully.');
+                // return $this->response->setJSON($data);
+                return view("userview/contact");
+            } else 
+            {
+                $session->set('unsend', 'Something Went Wrong.');
+                return view("userview/contact");
+            }
         }
     }
 
