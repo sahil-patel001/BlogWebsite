@@ -16,7 +16,7 @@ $session->remove('send'); ?>
 <?php } 
 $session->remove('unsend'); ?>
 <div class="col-lg-6 m-auto">
-    <form id="contact" enctype='multipart/form-data'>
+    <form>
         <div class="form-group mb-3">
             <label class="mb-2" for="subject">Subject:</label><span id="error_subject" class="text-danget ms-5"></span>
             <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject Title" required>
@@ -41,13 +41,12 @@ $(document).ready(function() {
             }
             $.ajax({
                 method: "POST",
-                url: "<?php echo base_url('User/contact') ?>",
+                url: "<?php echo base_url('User/sendMessage') ?>",
                 data: data,
                 success: function(response) {
-                    $('#contact').find('input').val('');
-                },
-                failure: function(response) {
-                    alert(response.d);
+                    console.log(response.status);
+                    alertify.set('notifier', 'position', 'top-left');
+                    alertify.success(response.status); 
                 }
             });
     })

@@ -8,8 +8,8 @@ use App\Models\Image;
 use App\Models\LikeModel;
 use App\Models\ContactModel;
 use App\Models\LoginModel;
+use App\Models\ReportModel;
 use App\Controllers\Login;
-
 
 class User extends Controller
 {
@@ -105,7 +105,7 @@ class User extends Controller
         $addImg = new Image();
 
         $imgs = $this->request->getFiles();
-        
+        // library(['image_lib']);
         foreach($imgs['img'] as $img){
             // $dataThub = array(
             //     'image_library' => "gd2",
@@ -169,11 +169,8 @@ class User extends Controller
         return view('userview/contact');
     }
 
-    public function contact()
+    public function sendMessage()
     {
-        $session = session();
-        $name = $session->get('user');
-        
         $contact = new ContactModel();
 
         $data = [
@@ -186,18 +183,15 @@ class User extends Controller
         {
             return false;
         } else {
-
             if($contact->insert($data))
             {
-                // $data = ['send'=>'Message Send Successfully.'];
-                // $session->set('send', 'Message Send Successfully.');
-                // return $this->response->setJSON($data);
-                return view("userview/contact");
-            } else 
-            {
-                $session->set('unsend', 'Something Went Wrong.');
-                return view("userview/contact");
-            }
+                $message = ['status'=>'Message Sent Successfully.'];
+                return $this->response->setJSON($message);
+            } //else 
+            // {
+            //     $session->set('unsend', 'Something Went Wrong.');
+            //     return view("userview/contact");
+            // }
         }
     }
 
@@ -207,8 +201,13 @@ class User extends Controller
         $blog = new BlogModel();
         $img = new Image();
 
-        $data['post'] = $blog->where('bid', $id)->findAll();
-        $data['img'] = $img->where('bid', $id)->findAll();
+        $sql = "SELECT * FROM blog_post WHERE bid='".$id."'";
+        $data['post'] = $blog->query($sql)->getResultArray();
+        // $data['post'] = $blog->where('bid', $id)->findAll();
+        $sql = "SELECT * FROM blog_image WHERE bid='".$id."'";
+        $data['img'] = $img->query($sql)->getResultArray();
+        // print_r($data['img']);
+        // die();
 
         return view('userview/editblog', $data);
     }
@@ -244,23 +243,38 @@ class User extends Controller
         $session = session();
         $session->set('update','Post Edited Successfully.');
         //insert the data into db and show it on post status
-        return redirect()->to('user/poststatus');
+        return view('userview/editblog');
+    }
+
+    public function deleteImage()
+    {
+        $session = session();
+        $img_id = $_GET['id'];
+        $bid = $_GET['bid'];
+        $img = new Image();
+
+        $sql = "DELETE FROM blog_image WHERE img_id='".$img_id."'";
+        if($img->query($sql))
+        {
+            $session->set('deleteImg','Image Removed.');
+            return redirect()->to('user/edit?id='.$bid);
+        }
     }
 
     public function delete()
     {
-        $id = $_GET['id'];
-        $img = new Image();
-        $blog = new BlogModel();
+        $session = session();
+       $id = $_GET['id'];
+       $blog = new BlogModel();
+       $img = new Image();
 
-        $sql = "delete from blog_post where bid='".$id."'";
-        $sql1 = "delete from blog_image where bid='".$id."'";
-        if($img->query($sql1) && $blog->query($sql)) {
-            $session = session();
-            $session->set('delete', 'Post Deleted Successfully.');
-            //make the query for delete and redirect to the post status view.
+       $sql_blog = "DELETE FROM blog_post WHERE bid=".$id."";
+       $sql_image = "DELETE FROM blog_image WHERE bid=".$id."";
+       if($img->query($sql_image) && $blog->query($sql_blog))
+       {
+            $session->set('delete','Blog Deleted Successfully.');
             return redirect()->to('user/poststatus');
-        }
+       }
     }
 
     public function like()
@@ -279,6 +293,22 @@ class User extends Controller
         }
         return redirect()->to('user');
         die();
+    }
+
+    public function reportpost()
+    {
+        $session = session();
+        $report = new ReportModel();
+
+        $data = [
+            'uid' => $session->get('id'),
+            'reason' => $this->request->getPost('reason'),
+            'created' => date('Y-m-d H:i:s'),
+        ];
+
+        $report->save($data);
+        $message = ['status'=>'Post Reported Successfully.'];
+        return $this->response->setJSON($message);
     }
 
     public function profile()

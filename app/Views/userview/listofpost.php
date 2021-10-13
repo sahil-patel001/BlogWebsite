@@ -8,6 +8,29 @@
 </h2>
 <br>
 <br>
+<!-- Model For Report -->
+<div class="modal fade" id="reportModel" tabindex="-1" aria-labelledby="reportModelLable" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Report Blog</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <lable class="mb-2" for="reason">Reason: </lable>
+                    <input type="text" id="reason" name="reason" class="form-control"
+                        placeholder="Enter the reason why you want to report this post.">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="reportpost" class="btn btn-danger">Report post</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container d-flex justify-content-center">
     <div class="row col-lg-11 d-flex">
         <?php foreach($all_data->getResult('array') as $data) { 
@@ -39,17 +62,41 @@
                                     class="bi bi-heart"></i></button><?php } ?></a>
                     </div>
                     <!-- TODO: redirect to the controller function with the session bid or pass bid in url as id and fetch it in the function -->
-                    <div>
-                        Likes: <?php echo $data['total']; ?>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#reportModel">Report</button>
+                        </div>
+                        <div>
+                            Likes: <?php echo $data['total']; ?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <?php } ?>
     </div>
-</div>
-</div>
-</div>
-
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $(document).on('click', '#reportpost', function() {
+            var data = {
+                'reason': $('#reason').val(),
+            }
+            $.ajax({
+                method: "POST",
+                url: "<?php echo base_url('user/reportpost') ?>",
+                data: data,
+                success: function(response) {
+                    $('#reportModel').modal('hide');
+                    $('#reportModel').find('input').val('');
+                    alertify.set('notifier', 'position', 'top-left');
+                    alertify.success(response.status);
+                }
+            });
+        });
+    });
+    </script>
+    
 </div>
 <?php echo view('templetes/footer'); ?>
