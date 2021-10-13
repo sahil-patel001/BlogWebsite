@@ -4,7 +4,7 @@
 <h2 class="text-primary text-center">
     <?php $session = session(); ?>
     <?php $user = $session->get('user') ?>
-    <div>Hello <?php if(isset($session)) { echo $user; } ?></div>
+    <div>Hello <?php if(isset($_SESSION['user'])) { echo $user; } ?></div>
 </h2>
 <br>
 <br>

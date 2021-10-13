@@ -2,12 +2,15 @@
 </br>
 <?php $session=session(); ?>
 <?php $session->set('add','User Added Successfully.'); ?>
-<?php if(isset($session)){?>
+<?php if(isset($_SESSION['update'])){?>
 <h4 class="text-success text-center"><?php echo $session->get('update');?></h4>
 <?php } $session->remove('update'); ?>
-<?php if(isset($session)){?>
+<?php if(isset($_SESSION['change'])){?>
 <h4 class="text-success text-center"><?php echo $session->get('change');?></h4>
 <?php } $session->remove('change'); ?>
+<?php if(isset($_SESSION['error'])){?>
+<h4 class="text-success text-center"><?php echo $session->get('error');?></h4>
+<?php } $session->remove('error'); ?>
 
 <br>
 <div class="container">

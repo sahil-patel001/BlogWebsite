@@ -1,6 +1,10 @@
 <?php echo view('templetes/userheader'); ?>
 <br>
 <br>
+<?php $session = session(); ?>
+<?php if(isset($_SESSION['err'])){?>
+<h5 class="text-success text-center"><?php echo $session->get('err'); ?></h5>
+<?php } $session->remove('err'); ?>
 <h1 class="text-secondary text-center">Add Post</h1>
 <div class="container">
     <hr>
@@ -28,7 +32,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
 $(document).ready(function() {
-    $(document).on('click', '#post', function() {    
+    $(document).on('click', '#post', function() {
         var form_data = new FormData();
         console.log(form_data);
         // Read selected files
@@ -40,9 +44,9 @@ $(document).ready(function() {
         form_data.append('description', $('#description').val());
 
         for (var pair of form_data.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]); 
+            console.log(pair[0] + ', ' + pair[1]);
         }
-     alert("<?php echo base_url('user/save') ?>");
+        alert("<?php echo base_url('user/save') ?>");
         $.ajax({
             type: 'post',
             url: "<?php echo base_url('user/save') ?>",
@@ -50,7 +54,7 @@ $(document).ready(function() {
             data: form_data,
             dataType: "JSON",
             success: function(response) {
-               alert(data);
+                alert(data);
             }
         });
     })

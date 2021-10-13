@@ -1,6 +1,10 @@
 <?php echo view('templetes/adminheader'); ?>
 </br>
 </br>
+<?php $session=session(); ?>
+<?php if(isset($_SESSION['error'])){?>
+<h4 class="text-danger text-center"><?php echo $session->get('error');?></h4>
+<?php } $session->remove('error'); ?>
 <div class="container">
     <h1 class="text-secondary text-center">Edit Admin</h1>
     <hr>

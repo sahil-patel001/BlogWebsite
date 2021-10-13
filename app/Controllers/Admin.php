@@ -33,11 +33,16 @@ class Admin extends Controller
         $session = session();
         $aid = $session->get('id');
         $admin = new AdminModel();
-        $data['all_admin'] = $admin->where('aid !=',$aid)->paginate(10);
+        if(!empty($aid)){
+            $data['all_admin'] = $admin->where('aid !=',$aid)->paginate(10);
 
-        $data['pagination_link'] = $admin->pager;
+            $data['pagination_link'] = $admin->pager;
 
-        return view('adminview/manageAdmin', $data);
+            return view('adminview/manageAdmin', $data);
+        } else {
+            $session->set('error','something went wrong.');
+            return view('adminview/manageAdmin');
+        }
     }
 
     public function contact()
@@ -52,24 +57,36 @@ class Admin extends Controller
 
     public function approve()
     {
+        $session = session();
         $approve = new BlogModel();
         $id = $_GET['id'];
 
-        $sql = "update blog_post SET status='approved' where bid='".$id."'";
-        $query=$approve->query($sql);
+        if(!empty($id)){
+            $sql = "update blog_post SET status='approved' where bid='".$id."'";
+            $query=$approve->query($sql);
 
-        return redirect()->to("/admin");
+            return redirect()->to("/admin");
+        } else {
+            $session->set('error','something went wrong.');
+            return redirect()->to('/admin/');
+        }
     }
 
     public function decline()
     {
+        $session = session();
         $decline = new BlogModel();
         $id = $_GET['id'];
 
-        $sql = "update blog_post SET status='rejected' where bid='".$id."'";
-        $query=$decline->query($sql);
+        if(!empty($id)){
+            $sql = "update blog_post SET status='rejected' where bid='".$id."'";
+            $query=$decline->query($sql);
 
-        return redirect()->to("/admin");
+            return redirect()->to("/admin");
+        } else {
+            $session->set('error','something went wrong.');
+            return redirect()->to('/admin/');
+        }
     }
 
     public function fetchuser()
@@ -83,6 +100,7 @@ class Admin extends Controller
 
     public function editUser()
     {
+        $session = session();
         $id = $_GET['id'];
 
         $data = [
@@ -95,21 +113,26 @@ class Admin extends Controller
 
         $user = new UserModel();
 
-        $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where uid='".$id."'";
-        if($user->query($sql)){
-            $session = session();
-            $session->set('success','Update Successfully.');
+            if(!empty($id)){
+            $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where uid='".$id."'";
+            if($user->query($sql)){
+                $session = session();
+                $session->set('success','Update Successfully.');
 
-            return redirect()->to('/admin/userManagement');
+                return redirect()->to('/admin/userManagement');
 
+            } else {
+                var_dump($user->errors());
+            } 
         } else {
-            var_dump($user->errors());
-        } 
-        
+            $session->set('error','something went wrong.');
+            return view('adminview/manageUser');
+        }  
     }
 
     public function editAdmin()
     {
+        $session = session();
         $id = $_GET['id'];
 
         $data = [
@@ -122,16 +145,21 @@ class Admin extends Controller
 
         $admin = new AdminModel();
 
-        $sql = "update admin SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where aid='".$id."'";
-        if($admin->query($sql)){
-            $session = session();
-            $session->set('success','Update Successfully.');
+            if(!empty($id)) {
+            $sql = "update admin SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where aid='".$id."'";
+            if($admin->query($sql)){
+                $session = session();
+                $session->set('success','Update Successfully.');
 
-            return redirect()->to('/admin/adminManagement');
+                return redirect()->to('/admin/adminManagement');
 
+            } else {
+                var_dump($admin->errors());
+            } 
         } else {
-            var_dump($admin->errors());
-        } 
+            $session->set('error','something went wrong.');
+            return view('adminview/manageAdmin');
+        }
     }
 
     public function deleteuser()
@@ -139,13 +167,18 @@ class Admin extends Controller
         $id = $_GET['id'];
         $user = new UserModel();
 
-        $sql = "delete from user where uid='".$id."'";
-        if($user->query($sql))
-        {
-            $session = session();
-            $session->set('delete','Deleted Successfully.');
+        if(!empty($id)) {
+            $sql = "delete from user where uid='".$id."'";
+            if($user->query($sql))
+            {
+                $session = session();
+                $session->set('delete','Deleted Successfully.');
 
-            return redirect()->to('/admin/userManagement');
+                return redirect()->to('/admin/userManagement');
+            }
+        } else {
+            $session->set('error','something went wrong.');
+            return view('adminview/manageUser');
         }
     }
 
@@ -153,9 +186,13 @@ class Admin extends Controller
     {
         $admin = new AdminModel();
         $id = $_GET['id'];
-        $data['admin'] = $admin->where('aid', $id)->findAll();
-
-        return view('adminview/editAdmin', $data);
+        if(!empty($id)){
+            $data['admin'] = $admin->where('aid', $id)->findAll();
+            return view('adminview/editAdmin', $data);
+        } else {
+            $session->set('error','something went wrong.');
+            return view('adminview/manageAdmin');
+        }
     }
 
     public function deleteadmin()
@@ -163,13 +200,18 @@ class Admin extends Controller
         $id = $_GET['id'];
         $admin = new AdminModel();
 
-        $sql = "delete from admin where aid='".$id."'";
-        if($admin->query($sql))
-        {
-            $session = session();
-            $session->set('delete','Deleted Successfully.');
+        if(!empty($id)){
+            $sql = "delete from admin where aid='".$id."'";
+            if($admin->query($sql))
+            {
+                $session = session();
+                $session->set('delete','Deleted Successfully.');
 
-            return redirect()->to('/admin/adminManagement');
+                return redirect()->to('/admin/adminManagement');
+            }
+        } else {
+            $session->set('error','something went wrong.');
+            return view('adminview/manageAdmin');
         }
     }
 

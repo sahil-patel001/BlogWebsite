@@ -45,11 +45,16 @@ class User extends Controller
         $getPost = new BlogModel(); 
         $getImg = new Image();
 
-        $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid where blog_post.uid='".$id."' group by blog_image.bid order by blog_post.created desc";
+        if(!empty($id)){
+            $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid where blog_post.uid='".$id."' group by blog_image.bid order by blog_post.created desc";
 
-        $data['post'] = $getImg->query($sql);
+            $data['post'] = $getImg->query($sql);
 
-        return view('userview/poststatus', $data);
+            return view('userview/poststatus', $data);
+        } else {
+            $session->set('error','Something Went Wrong.');
+            return view('userview/poststatus', $data);
+        }
     }
 
     // public function upload_image()
@@ -87,8 +92,6 @@ class User extends Controller
         $session = session();
         helper(['form', 'url']);
 
-        $img = $this->request->getFile('img');
-
         $data = [
             'uid' => $session->get('id'),
             'b_title' => $this->request->getVar('title'),
@@ -105,42 +108,47 @@ class User extends Controller
         $addImg = new Image();
 
         $imgs = $this->request->getFiles();
-        // library(['image_lib']);
-        foreach($imgs['img'] as $img){
-            // $dataThub = array(
-            //     'image_library' => "gd2",
-            //     'create_thumb' => TRUE,
-            //     'maintain_ratio' => TRUE,
-            //     'width' => 100,
-            //     'height' => 100,
-            //     'img' => $img->move('./thumb',$img->getName()),
-            // );
-            // $this->load->library('image_lib');
-            // $this->image_lib->initialize($config2);
-            // $this->image_lib->resize();
-            // $this->image_lib->clear();
 
-            //  $image = \Config\Services::image()
-            //   ->withFile($img)
-            //   ->resize(100, 100, true, 'height')
-            //   ->save(FCPATH .'/thumb/'. $img->getRandomName());
-            
-            $dataImg = [
-                'img' => $img->move('./upload', $img->getName()),
-                'img' =>  $img->getName(),
-                'bid' => $id,
-                'created' => date('Y-m-d H:i:s'),
-            ];
-            $addImg->insert($dataImg);
-        }     
+        if(!empty($imgs)){
+            foreach($imgs['img'] as $img){
+                // $dataThub = array(
+                //     'image_library' => "gd2",
+                //     'create_thumb' => TRUE,
+                //     'maintain_ratio' => TRUE,
+                //     'width' => 100,
+                //     'height' => 100,
+                //     'img' => $img->move('./thumb',$img->getName()),
+                // );
+                // $this->load->library('image_lib');
+                // $this->image_lib->initialize($config2);
+                // $this->image_lib->resize();
+                // $this->image_lib->clear();
 
-        if(isset($post))
-        {
-            $session->set('post','Post Created Successfully.');
-            return redirect()->to('user/poststatus');
-        }
-        else
-        {
+                //  $image = \Config\Services::image()
+                //   ->withFile($img)
+                //   ->resize(100, 100, true, 'height')
+                //   ->save(FCPATH .'/thumb/'. $img->getRandomName());
+                $imgName = $img->getName().date('Y-m-d H:i:s');
+                $dataImg = [
+                    'img' => $img->move('./upload', $imgName),
+                    'img' =>  $img->getName(),
+                    'bid' => $id,
+                    'created' => date('Y-m-d H:i:s'),
+                ];
+                $addImg->insert($dataImg);
+            }     
+
+            if(isset($post))
+            {
+                $session->set('post','Post Created Successfully.');
+                return redirect()->to('user/poststatus');
+            }
+            else
+            {
+                $session->set('err','Something Went Wrong.');
+                return view('userview/addpost');
+            }
+        } else {
             $session->set('err','Something Went Wrong.');
             return view('userview/addpost');
         }
@@ -153,15 +161,21 @@ class User extends Controller
 
     public function detail()
     {
+        $session = session();
         $id = $_GET['id'];
 
         $detail = new BlogModel();
 
-        $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid where blog_post.bid='".$id."' order by blog_post.bid";
+        if(!empty($id)){
+            $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid where blog_post.bid='".$id."' order by blog_post.bid";
 
-        $data['detail'] = $detail->query($sql);
-  
-        return view('userview/detailpost', $data);
+            $data['detail'] = $detail->query($sql);
+    
+            return view('userview/detailpost', $data);
+        } else {
+            $session->set('err','something went wrong.');
+            return redirect()->to('user/poststatus');
+        }
     }
 
     public function contactview()
@@ -201,22 +215,25 @@ class User extends Controller
         $blog = new BlogModel();
         $img = new Image();
 
-        $sql = "SELECT * FROM blog_post WHERE bid='".$id."'";
-        $data['post'] = $blog->query($sql)->getResultArray();
-        // $data['post'] = $blog->where('bid', $id)->findAll();
-        $sql = "SELECT * FROM blog_image WHERE bid='".$id."'";
-        $data['img'] = $img->query($sql)->getResultArray();
-        // print_r($data['img']);
-        // die();
+        if(!empty($id)){
+            $sql = "SELECT * FROM blog_post WHERE bid='".$id."'";
+            $data['post'] = $blog->query($sql)->getResultArray();
 
-        return view('userview/editblog', $data);
+            $sql = "SELECT * FROM blog_image WHERE bid='".$id."'";
+            $data['img'] = $img->query($sql)->getResultArray();
+            
+            return view('userview/editblog', $data);
+        } else {
+            $session->set('err','something went wrong.');
+            return redirect()->to('user/poststatus');
+        }
     }
 
     public function editpost()
     {
         $id = $_GET['id'];
         $blog = new BlogModel();
-        $addI = new Image();
+        $addImg = new Image();
 
         $data = [
             'b_title' => $this->request->getvar('title'),
@@ -224,26 +241,35 @@ class User extends Controller
             'updated' => date('Y-m-d H:i:s'),
         ];
 
-        $sql = "update blog_post SET b_title='".$data['b_title']."', b_description='".$data['b_description']."', updated='".$data['updated']."' where bid='".$id."'";
+        if(!empty($id)){
+            $sql = "update blog_post SET b_title='".$data['b_title']."', b_description='".$data['b_description']."', updated='".$data['updated']."' where bid='".$id."'";
 
-        $blog->query($sql);
+            $blog->query($sql);
 
-        $imgs = $this->request->getFiles();
-        foreach($imgs['img'] as $img){
-            if(!empty($img)){
-                $dataImg = [
-                    'img' => $img->move('./upload', $img->getName()),
-                    'img' =>  $img->getName(),
-                    'updated' => date('Y-m-d H:i:s'),
-                ];
-                $sql1 = "update blog_image SET img = '".$dataImg['img']."', updated='".$dataImg['updated']."' where bid='".$id."'";
-                $addI->query($sql1);
-            }
-        }  
-        $session = session();
-        $session->set('update','Post Edited Successfully.');
-        //insert the data into db and show it on post status
-        return view('userview/editblog');
+            $imgs = $this->request->getFiles();
+            foreach($imgs['img'] as $img){
+                if(!empty($img)){
+                    $imgName = $img->getName().date('Y-m-d H:i:s');
+                    $dataImg = [
+                        'bid' => $id,
+                        'img' => $img->move('./upload', $imgName),
+                        'img' =>  $img->getName(),
+                        'updated' => date('Y-m-d H:i:s'),
+                    ];
+                    $addImg->insert($dataImg);
+                } else {
+                    $sql1 = "update blog_image SET updated='".$dataImg['updated']."' where bid='".$id."'";
+                    $addImg->query($sql1);
+                }
+            }  
+            $session = session();
+            $session->set('update','Post Edited Successfully.');
+            //insert the data into db and show it on post status
+            return redirect()->to('user/poststatus');
+        } else {
+            $session->set('err','something went wrong.');
+            return redirect()->to('user/poststatus');
+        }
     }
 
     public function deleteImage()
@@ -253,10 +279,35 @@ class User extends Controller
         $bid = $_GET['bid'];
         $img = new Image();
 
-        $sql = "DELETE FROM blog_image WHERE img_id='".$img_id."'";
-        if($img->query($sql))
-        {
-            $session->set('deleteImg','Image Removed.');
+        // for delete image from local folder
+        if(!empty($img_id)){
+            $dataFetch = "SELECT img FROM blog_image WHERE img_id=".$img_id."";
+            
+            $data = $img->query($dataFetch)->getResultArray();
+            foreach($data as $file)
+            {
+                $imageFile = $file['img'];
+                if(!empty($imageFile)){
+                    if(file_exists("./upload/".$imageFile)){
+                        unlink("./upload/".$imageFile);
+                    }
+                    else{
+                        break;
+                    }
+                } else {
+                    $session->set('error','something went wrong.');
+                    return redirect()->to('user/edit?id='.$bid);
+                }
+            }
+        
+
+            if($img->delete(['img_id',$img_id]))
+            {
+                $session->set('deleteImg','Image Removed.');
+                return redirect()->to('user/edit?id='.$bid);
+            }
+        } else {
+            $session->set('error','something went wrong.');
             return redirect()->to('user/edit?id='.$bid);
         }
     }
@@ -264,17 +315,37 @@ class User extends Controller
     public function delete()
     {
         $session = session();
-       $id = $_GET['id'];
-       $blog = new BlogModel();
-       $img = new Image();
+        $id = $_GET['id'];
+        $blog = new BlogModel();
+        $img = new Image();
 
-       $sql_blog = "DELETE FROM blog_post WHERE bid=".$id."";
-       $sql_image = "DELETE FROM blog_image WHERE bid=".$id."";
-       if($img->query($sql_image) && $blog->query($sql_blog))
-       {
-            $session->set('delete','Blog Deleted Successfully.');
-            return redirect()->to('user/poststatus');
-       }
+        if(!empty($id)){
+            $sql_blog = "DELETE FROM blog_post WHERE bid=".$id."";
+            $sql_image = "DELETE FROM blog_image WHERE bid=".$id."";
+
+            if($img->query($sql_image) && $blog->query($sql_blog))
+            {
+                $sql = "SELECT img FROM blog_image WHERE bid=".$id."";
+                $data = $img->query($sql)->getResultArray();
+                foreach($data as $img)
+                {
+                    $imageFile = $img['img'];
+                    if(!empty($imageFile)){
+                        if(file_exists("./upload/".$imageFile)){
+                            unlink("./upload/".$imageFile);
+                        }
+                        else{
+                            break;
+                        }
+                    } else {
+                        $session->set('error','something went wrong.');
+                        return redirect()->to('user/poststatus');
+                    }
+                }
+                $session->set('delete','Blog Deleted Successfully.');
+                return redirect()->to('user/poststatus');
+            }
+        }
     }
 
     public function like()
@@ -284,15 +355,19 @@ class User extends Controller
         $bid = $_GET['id'];
         $uid = $session->get('id');
         
-        $sql = "select action from blog_likebtn where uid='".$uid."' and bid='".$bid."'";
-        if(empty($like->query($sql)->getRow())){
-            $sql1 = "insert into blog_likebtn(uid, bid) values('".$uid."', '".$bid."')"; 
-            $like->query($sql1);
+        if(!empty($bid) && !empty($uid)){
+            $sql = "select action from blog_likebtn where uid='".$uid."' and bid='".$bid."'";
+            if(empty($like->query($sql)->getRow())){
+                $sql1 = "insert into blog_likebtn(uid, bid) values('".$uid."', '".$bid."')"; 
+                $like->query($sql1);
+            } else {
+                $like->where('bid',$bid)->where('uid',$uid)->delete();
+            }
+            return redirect()->to('user');
         } else {
-            $like->where('bid',$bid)->where('uid',$uid)->delete();
+            $session->set('error','something went wrong.');
+            return redirect()->to('user');
         }
-        return redirect()->to('user');
-        die();
     }
 
     public function reportpost()
@@ -316,8 +391,13 @@ class User extends Controller
         $session = session();
         $id = $session->get('id');
         $user = new UserModel();
-        $data['user'] = $user->where('uid',$id)->get();
-        return view('userview/profile', $data);
+        if(!empty($id)){
+            $data['user'] = $user->where('uid',$id)->get();
+            return view('userview/profile', $data);
+        } else {
+            $session->set('error','something went wrong.');
+            return redirect()->to('user');
+        }
     }
 
      public function update()
@@ -333,24 +413,29 @@ class User extends Controller
 
         $user = new UserModel();
 
-        $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', password='".$data['password']."', phone='".$data['phone']."' where uid='".$id."'";
-        if($user->query($sql)){
-            $session = session();
-            $session->set('update','Update Successfully.');
+        if(!empty($id)){
+            $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', password='".$data['password']."', phone='".$data['phone']."' where uid='".$id."'";
+            if($user->query($sql)){
+                $session = session();
+                $session->set('update','Update Successfully.');
 
-            return redirect()->to('/User/profile');
+                return redirect()->to('/User/profile');
 
+            } else {
+                var_dump($user->errors());
+            }
         } else {
-            var_dump($user->errors());
+            $session->set('error','something went wrong.');
+            return redirect()->to('/User/profile');
         }
     
     }
 
-    public function addedBy()
-    {
-        $uid = $_GET['id'];
-        $user = new UserModel();
-    }
+    // public function addedBy()
+    // {
+    //     $uid = $_GET['id'];
+    //     $user = new UserModel();
+    // }
 
     public function password()
     {
@@ -368,25 +453,30 @@ class User extends Controller
             'confirm' => $this->request->getVar('confirm'),
         ];
 
-        $sql = "select password from user where uid = '".$id."'";
+        if(!empty($id)){
+            $sql = "select password from user where uid = '".$id."'";
 
-        $old = $user->query($sql)->getRow();
-        $session = session();
+            $old = $user->query($sql)->getRow();
+            $session = session();
 
-        if($old->password == $data['current']){
-            if($data['new'] == $data['confirm']) {
-                $password = md5($data['new']);
-                $sql = "update user SET password='".$password."' updated='".date('Y-m-d H:i:s')."' where uid='".$id."'";
-                $user->query($sql);
-                $session->set('change', 'Your password is changed successfully.');
-                return redirect()->to('user/profile');
+            if($old->password == $data['current']){
+                if($data['new'] == $data['confirm']) {
+                    $password = md5($data['new']);
+                    $sql = "update user SET password='".$password."' updated='".date('Y-m-d H:i:s')."' where uid='".$id."'";
+                    $user->query($sql);
+                    $session->set('change', 'Your password is changed successfully.');
+                    return redirect()->to('user/profile');
+                } else {
+                    $session->set('new', 'confirm password didn\'t match');
+                    return redirect()->to('user/password');
+                }
             } else {
-                $session->set('new', 'confirm password didn\'t match');
+                $session->set('match', 'current password is wrong');
                 return redirect()->to('user/password');
             }
         } else {
-            $session->set('match', 'current password is wrong');
-            return redirect()->to('user/password');
+            $session->set('error','something went wrong.');
+            return redirect()->to('/User/password');
         }
     }
 }

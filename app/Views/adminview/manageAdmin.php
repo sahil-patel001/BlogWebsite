@@ -4,11 +4,11 @@
     <h2 class="text-secondary text-center mt-4 mb-4">Manage Admin</h2>
     <hr>
     <?php $session = session(); ?>
-    <?php if(isset($session)) { ?>
+    <?php if(isset($_SESSION['success'])) { ?>
     <h5 class="text-success text-center"><?php echo $session->get('success'); ?></h5>
     <?php } 
     $session->remove('success'); ?>
-    <?php if(isset($session)) { ?>
+    <?php if(isset($_SESSION['delete'])) { ?>
     <h5 class="text-success text-center"><?php echo $session->get('delete'); ?></h5>
     <?php } 
     $session->remove('delete'); ?>

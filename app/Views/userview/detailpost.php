@@ -16,7 +16,7 @@
     <?php foreach($detail->getResult('array') as $data){
     $imgURL = base_url('./upload').'/'.$data['img']; ?>
     <a data-fancybox="gallery" href="<?php echo $imgURL ?>">
-        <img src="<?php echo $imgURL ?>">
+        <img style="width: 320px; height: 320px; objectfit: cover" src="<?php echo $imgURL ?>">
     </a>
     <?php } ?>
 </div>

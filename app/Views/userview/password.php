@@ -2,12 +2,15 @@
 <br>
 <br>
 <?php $session=session(); ?>
-<?php if(isset($session)){?>
+<?php if(isset($_SESSION['match'])){?>
 <h4 class="text-danger text-center"><?php echo $session->get('match');?></h4>
 <?php } $session->remove('match'); ?>
-<?php if(isset($session)){?>
+<?php if(isset($_SESSION['new'])){?>
 <h4 class="text-danger text-center"><?php echo $session->get('new');?></h4>
 <?php } $session->remove('new'); ?>
+<?php if(isset($_SESSION['error'])){?>
+<h4 class="text-danger text-center"><?php echo $session->get('error');?></h4>
+<?php } $session->remove('error'); ?>
 
 <h1 class="text-secondary text-center">Change Password</h1>
 <div class="container">
