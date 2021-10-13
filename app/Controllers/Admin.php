@@ -220,11 +220,16 @@ class Admin extends Controller
         $id = $_GET['id'];
         $detail = new ContactModel();
 
-        $sql = "select * from user_contact where cid='".$id."'";
+        if(!empty($id)){
+            $sql = "select * from user_contact where cid='".$id."'";
 
-        $data['detail'] = $detail->query($sql);
-        
-        return view('adminview/detail', $data);
+            $data['detail'] = $detail->query($sql);
+            
+            return view('adminview/detail', $data);
+        } else {
+            $session->set('error','something went wrong.');
+            return view('adminview/detail');
+        }
     }
 
     public function addUser()
@@ -243,11 +248,16 @@ class Admin extends Controller
 
         $detail = new BlogModel();
 
-        $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid where blog_post.bid='".$id."' order by blog_post.bid";
+        if(!empty($id)){
+            $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid where blog_post.bid='".$id."' order by blog_post.bid";
 
-        $data['detail'] = $detail->query($sql);
-  
-        return view('adminview/detailpost', $data);
+            $data['detail'] = $detail->query($sql);
+    
+            return view('adminview/detailpost', $data);
+        } else {
+            $session->set('error','something went wrong.');
+            return view('adminview/detailpost');
+        }
     }
 }
 

@@ -1,5 +1,9 @@
 <?php echo view('templetes/adminheader'); ?>
 <br>
+<?php $session=session(); ?>
+<?php if(isset($_SESSION['error'])){?>
+<h4 class="text-danger text-center"><?php echo $session->get('error');?></h4>
+<?php } $session->remove('error'); ?>
 <div class="container">
     <h2 class="text-secondary text-center mt-4 mb-4">Manage Admin</h2>
     <hr>

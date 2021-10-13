@@ -3,6 +3,9 @@
 <br>
 <?php $session=session(); ?>
 <?php $admin = $session->get('admin'); ?>
+<?php if(isset($_SESSION['error'])){?>
+<h4 class="text-danger text-center"><?php echo $session->get('error');?></h4>
+<?php } $session->remove('error'); ?>
 <h2 class="text-primary text-center">
     <div><?php echo "Hello ".$admin; ?></div>
 </h2>
