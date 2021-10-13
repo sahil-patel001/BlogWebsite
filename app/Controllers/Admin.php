@@ -12,9 +12,8 @@ class Admin extends Controller
     public function index()
     {
         $post = new BlogModel();
-        $data['pending_post'] = $post->orderBy('bid','desc')->paginate(5);
-
-        $data['pagination_link'] = $post->pager;
+        $sql = "SELECT * FROM blog_post INNER JOIN blog_image ON blog_post.bid=blog_image.bid GROUP BY blog_post.bid ORDER BY blog_post.bid DESC";
+        $data['pending_post'] = $post->query($sql)->getResultArray();
 
         return view('adminview/post', $data);
     }

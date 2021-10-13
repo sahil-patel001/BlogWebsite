@@ -50,8 +50,17 @@
                         <h5 class="card-title"><?php echo $data['b_title']; ?></h5>
                     </div>
                     <p>By - <?php echo $data['fname'] ?></p>
-                    <p class="card-text">For getting more information about this blog, Please click on the button
-                        given below.</p>
+                    <p class="card-text">
+                        <?php if(strlen($data['b_description'])<=100)
+                        {
+                            echo $data['b_description'];
+                        }
+                        else
+                        {
+                            $y=substr($data['b_description'],0,100) . '...';
+                            echo $y;
+                        } ?>
+                    </p>
                     <div class="d-flex justify-content-between" style="margin-bottom: 10px">
                         <a href="user/detail?id=<?php echo $data["bid"] ?>" class="btn btn-primary">Detail
                             Blog</a>
@@ -97,6 +106,6 @@
         });
     });
     </script>
-    
+
 </div>
 <?php echo view('templetes/footer'); ?>

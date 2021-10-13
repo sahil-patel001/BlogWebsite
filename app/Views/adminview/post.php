@@ -18,6 +18,7 @@
             <tr>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Image</th>
                 <th>Detail</th>
                 <th>Action</th>
             </tr>
@@ -26,8 +27,24 @@
         <tbody>
             <tr>
                 <td><?php echo $data['b_title'] ?></td>
-                <td><?php echo $data["b_description"] ?></td>
-                <td><a href="admin/detailpost?id=<?php echo $id = $data["bid"] ?>" class="btn btn-primary">Detail Post</a></td>
+                <td>
+                    <?php if(strlen($data['b_description'])<=200)
+                    {
+                        echo $data['b_description'];
+                    }
+                    else
+                    {
+                        $y=substr($data['b_description'],0,200) . '...';
+                        echo $y;
+                    } ?>
+                </td>
+                <td>
+                    <?php $imgURL = base_url('./upload').'/'.$data['img']; ?>
+                    <img src="<?php echo $imgURL ?>" style="width: 100px; height: 100px; objectfit: cover;">
+                </td>
+                <td><a href="admin/detailpost?id=<?php echo $id = $data["bid"] ?>" class="btn btn-primary">Detail
+                        Post</a></td>
+
                 <?php if($data['status']=='pending') {?>
                 <td class="d-flex align-content-center">
                     <a href="admin/approve?id=<?php echo $id = $data["bid"] ?>"><button class="me-2 btn btn-primary"><i
