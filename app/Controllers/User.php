@@ -381,9 +381,14 @@ class User extends Controller
             'created' => date('Y-m-d H:i:s'),
         ];
 
-        $report->save($data);
-        $message = ['status'=>'Post Reported Successfully.'];
-        return $this->response->setJSON($message);
+        if(!empty($data['uid']) && !empty($data['reason'])){
+            $report->save($data);
+            $message = ['status'=>'Post Reported Successfully.'];
+            return $this->response->setJSON($message);
+        } else {
+            http_response_code(404);
+            die();
+        }
     }
 
     public function profile()

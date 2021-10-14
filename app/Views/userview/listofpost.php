@@ -97,10 +97,13 @@
                 url: "<?php echo base_url('user/reportpost') ?>",
                 data: data,
                 success: function(response) {
-                    $('#reportModel').modal('hide');
-                    $('#reportModel').find('input').val('');
-                    alertify.set('notifier', 'position', 'top-left');
-                    alertify.success(response.status);
+                        $('#reportModel').modal('hide');
+                        $('#reportModel').find('input').val('');
+                        alertify.set('notifier', 'position', 'top-left');
+                        alertify.success(response.status);
+                },
+                error: function(error) {
+                    alert("Please Enter The Reason!");
                 }
             });
         });
