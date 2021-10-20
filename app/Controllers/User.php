@@ -464,20 +464,32 @@ class User extends Controller
             $old = $user->query($sql)->getRow();
             $session = session();
 
-            if($old->password == $data['current']){
-                if($data['new'] == $data['confirm']) {
-                    $password = md5($data['new']);
-                    $sql = "update user SET password='".$password."' updated='".date('Y-m-d H:i:s')."' where uid='".$id."'";
-                    $user->query($sql);
-                    $session->set('change', 'Your password is changed successfully.');
-                    return redirect()->to('user/profile');
+            if(!empty($data['current'])){
+                if($old->password == $data['current']){
+                    if(!empty($data['new']) && !empty($data['confirm'])){
+                        if($data['new'] == $data['confirm']) {
+                            $password = md5($data['new']);
+                            $sql = "update user SET password='".$password."',updated='".date('Y-m-d H:i:s')."' where uid='".$id."'";
+                            $user->query($sql);
+                            // $message = ['status'=>'Your password is changed successfully.'];
+                            // return $this->response->setJSON($message);
+                            $session->set('change', 'Your password is changed successfully.');
+                            return redirect()->to('user/profile');
+                        } else {
+                            $session->set('new', 'confirm password didn\'t match');
+                            return redirect()->to('user/password');
+                        }
+                    } else {
+                        $session->set('empty', 'Please enter new and confirm password.');
+                        return redirect()->to('user/password');
+                    }
                 } else {
-                    $session->set('new', 'confirm password didn\'t match');
+                    $session->set('match', 'current password is wrong');
                     return redirect()->to('user/password');
-                }
+                } 
             } else {
-                $session->set('match', 'current password is wrong');
-                return redirect()->to('user/password');
+                $session->set('current','Please enter current password.');
+                return redirect()->to('/User/password');
             }
         } else {
             $session->set('error','something went wrong.');
@@ -486,4 +498,4 @@ class User extends Controller
     }
 }
 
-?>
+?>                  

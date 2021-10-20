@@ -44,7 +44,6 @@ $(document).ready(function() {
                 url: "<?php echo base_url('User/sendMessage') ?>",
                 data: data,
                 success: function(response) {
-                    console.log(response.status);
                     alertify.set('notifier', 'position', 'top-left');
                     alertify.success(response.status); 
                 }

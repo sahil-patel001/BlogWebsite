@@ -42,7 +42,7 @@
         </div>
         <div class="form-group mb-3">
             <label class="mb-2 pe-3" for="description">Description: </label>
-            <small class="form-text text-muted">( Character: Min=30 And Max=100 )</small>
+            <small class="form-text text-muted">( Character: Min=30 And Max=1000 )</small>
             <textarea type="text" minlength="30" maxlength="1000" rows="10" class="form-control" name="description"
                 id="description" required><?php echo $data['b_description'] ?></textarea>
         </div>
@@ -51,5 +51,29 @@
     </form>
     <?php } ?>
 </div>
+<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    $(document).on('click', '#reportpost', function() {
+        var data = {
+            'reason': $('#reason').val(),
+        }
+        $.ajax({
+            method: "POST",
+            url: "<?php //echo base_url('user/reportpost') ?>",
+            data: data,
+            success: function(response) {
+                $('#reportModel').modal('hide');
+                $('#reportModel').find('input').val('');
+                alertify.set('notifier', 'position', 'top-left');
+                alertify.success(response.status);
+            },
+            error: function(error) {
+                alert("Please Enter The Reason!");
+            }
+        });
+    });
+});
+</script> -->
 <br>
 <?php echo view('templetes/footer'); ?>

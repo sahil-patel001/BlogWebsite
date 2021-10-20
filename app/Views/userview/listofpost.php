@@ -103,6 +103,8 @@
                         alertify.success(response.status);
                 },
                 error: function(error) {
+                    // alertify.set('notifier', 'position', 'top-left');
+                    // alertify.danger('Please Enter The Reason!');
                     alert("Please Enter The Reason!");
                 }
             });
