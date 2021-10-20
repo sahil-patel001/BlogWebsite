@@ -20,7 +20,7 @@
     <h5 class="text-danger text-center"><?php echo $session->get('err'); ?></h5>
     <?php } $session->remove('err'); ?>
     <br>
-    <table id="postTable" class="display" cellspacing="0" width="100%">
+    <table id="postTable" class="display text-center">
         <thead>
             <tr>
                 <th>Title</th>
@@ -29,8 +29,8 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <?php foreach($post->getResult('array') as $data){ ?>
         <tbody>
+            <?php foreach($post->getResult('array') as $data){ ?>
             <tr>
                 <td><?php echo $data["b_title"] ?></td>
                 <td><?php echo $data["b_description"] ?></td>
@@ -43,21 +43,15 @@
                 <td><?php if($data['status']=='pending'){ echo '<h6 class="alert alert-warning">Pending</h6>';} elseif($data['status']=='rejected') { echo '<h6 class="alert alert-danger">Rejected</h6>';} else {echo '<h6 class="alert alert-success">Approved</h6>';};?>
                 </td>
             </tr>
+            <?php
+            } ?>
         </tbody>
-        <?php
-     } ?>
     </table>
 </div>
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#postTable').DataTable();

@@ -16,7 +16,7 @@
 <br>
 <br>
 <div class="container">
-    <table id="myTable" class="display">
+    <table id="myTable" class="display text-center">
         <thead>
             <tr>
                 <th>Title</th>
@@ -26,8 +26,8 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <?php foreach($pending_post as $data){ ?>
         <tbody>
+            <?php foreach($pending_post as $data){ ?>
             <tr>
                 <td><?php echo $data['b_title'] ?></td>
                 <td>
@@ -67,17 +67,14 @@
                 <?php } ?>
                 <?php } ?>
             </tr>
+            <?php
+            } ?>
         </tbody>
-        <?php
-     } ?>
     </table>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#myTable').DataTable();
