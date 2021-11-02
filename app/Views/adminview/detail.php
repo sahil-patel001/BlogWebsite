@@ -14,6 +14,10 @@
             <?php foreach($detail->getResult('array') as $data) { ?>
             <h5 class="card-title"><?php echo $data['subject'] ?></h5>
             <p class="card-text"><?php echo $data['message'] ?></p>
+            <br>
+            <figcaption class="blockquote-footer">
+                <cite title="Source Title"><?php echo $data['email'] ?></cite>
+            </figcaption>
             <a href="contact" class="btn btn-primary">Go Back</a>
             <?php } ?>
         </div>

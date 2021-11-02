@@ -17,6 +17,7 @@
             <tr>
                 <th>No.</th>
                 <th>Subject</th>
+                <th>Send By</th>
                 <th>Details</th>
             </tr>
         </thead>
@@ -28,6 +29,7 @@
             <tr>
                 <td><?php echo $counter ?></td>
                 <td><?php echo $data['subject'] ?></td>
+                <td><?php echo $data['fname'] ?></td>
                 <td><a href="detail?id=<?php echo $data['cid']; ?>"><button class="btn btn-primary"><i
                                 class="bi bi-envelope-fill"></i></button></a></td>
             </tr>

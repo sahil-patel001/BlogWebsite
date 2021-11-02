@@ -24,9 +24,6 @@ class User extends Controller
         // print_r($sql);
         // die();
         $data['all_data'] = $getAll->query($sql);
-
-        // print_r($data['all_data']);
-        // die();
         
         return view('userview/listofpost', $data);
     }
@@ -186,11 +183,13 @@ class User extends Controller
     public function sendMessage()
     {
         $contact = new ContactModel();
+        $session = session();
+        $uid = $session->get('id');
 
         $data = [
             "subject" => $this->request->getPost('subject'),
             "message" => $this->request->getPost('message'),
-            'created' => date('Y-m-d H:i:s'),
+            'uid' => $uid,
         ];
 
         if(empty($data['subject']) || empty($data['message']))

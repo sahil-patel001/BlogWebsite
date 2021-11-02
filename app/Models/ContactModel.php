@@ -12,7 +12,7 @@ class ContactModel extends Model
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['cid','subject','message','sendBy','created','updated'];
+    protected $allowedFields = ['cid','subject','message','sendBy','created','uid'];
 
     protected $useTimestamps = false;
 

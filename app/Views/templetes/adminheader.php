@@ -36,13 +36,16 @@
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/admin/userManagement">User Management</a>
+                        <a class="nav-link" href="/admin/userManagement">User Management</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/admin/adminManagement">Admin Management</a>
+                        <a class="nav-link" href="/admin/adminManagement">Admin Management</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/reportedBlog">Reported Blog</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

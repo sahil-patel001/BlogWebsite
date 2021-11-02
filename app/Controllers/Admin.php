@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\BlogModel;
 use App\Models\UserModel;
 use App\Models\AdminModel;
+use App\Models\ReportModel;
 use App\Models\ContactModel;
 use CodeIgniter\Controller;
 
@@ -31,11 +32,14 @@ class Admin extends Controller
         $session = session();
         $aid = $session->get('id');
         $admin = new AdminModel();
-        if(!empty($aid)){
+        if(!empty($aid))
+        {
             $data['all_admin'] = $admin->where('aid !=',$aid)->findAll();
 
             return view('adminview/manageAdmin', $data);
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/manageAdmin');
         }
@@ -45,7 +49,8 @@ class Admin extends Controller
     {
         $contact = new ContactModel();
 
-        $data['receive_msg'] = $contact->findAll();
+        $sql = "SELECT * FROM user_contact INNER JOIN user ON user_contact.uid=user.uid";
+        $data['receive_msg'] = $contact->query($sql)->getResultArray();
 
         return view('adminview/messagesFromUser', $data);
     }
@@ -56,12 +61,15 @@ class Admin extends Controller
         $approve = new BlogModel();
         $id = $_GET['id'];
 
-        if(!empty($id)){
+        if(!empty($id))
+        {
             $sql = "update blog_post SET status='approved' where bid='".$id."'";
             $query=$approve->query($sql);
 
             return redirect()->to("/admin");
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return redirect()->to('/admin/');
         }
@@ -73,12 +81,15 @@ class Admin extends Controller
         $decline = new BlogModel();
         $id = $_GET['id'];
 
-        if(!empty($id)){
+        if(!empty($id))
+        {
             $sql = "update blog_post SET status='rejected' where bid='".$id."'";
             $query=$decline->query($sql);
 
             return redirect()->to("/admin");
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return redirect()->to('/admin/');
         }
@@ -108,18 +119,23 @@ class Admin extends Controller
 
         $user = new UserModel();
 
-            if(!empty($id)){
+        if(!empty($id))
+        {
             $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where uid='".$id."'";
-            if($user->query($sql)){
+            if($user->query($sql))
+            {
                 $session = session();
                 $session->set('success','Update Successfully.');
 
                 return redirect()->to('/admin/userManagement');
-
-            } else {
-                var_dump($user->errors());
             } 
-        } else {
+            else 
+            {
+                var_dump($user->errors());
+            }
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/manageUser');
         }  
@@ -140,7 +156,8 @@ class Admin extends Controller
 
         $admin = new AdminModel();
 
-            if(!empty($id)) {
+            if(!empty($id)) 
+            {
             $sql = "update admin SET fname='".$data['fname']."', lname='".$data['lname']."', email='".$data['email']."', phone='".$data['phone']."', updated='".$data['updated']."' where aid='".$id."'";
             if($admin->query($sql)){
                 $session = session();
@@ -148,10 +165,14 @@ class Admin extends Controller
 
                 return redirect()->to('/admin/adminManagement');
 
-            } else {
+            } 
+            else 
+            {
                 var_dump($admin->errors());
             } 
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/manageAdmin');
         }
@@ -162,7 +183,8 @@ class Admin extends Controller
         $id = $_GET['id'];
         $user = new UserModel();
 
-        if(!empty($id)) {
+        if(!empty($id)) 
+        {
             $sql = "delete from user where uid='".$id."'";
             if($user->query($sql))
             {
@@ -171,7 +193,9 @@ class Admin extends Controller
 
                 return redirect()->to('/admin/userManagement');
             }
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/manageUser');
         }
@@ -181,10 +205,13 @@ class Admin extends Controller
     {
         $admin = new AdminModel();
         $id = $_GET['id'];
-        if(!empty($id)){
+        if(!empty($id))
+        {
             $data['admin'] = $admin->where('aid', $id)->findAll();
             return view('adminview/editAdmin', $data);
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/manageAdmin');
         }
@@ -195,7 +222,8 @@ class Admin extends Controller
         $id = $_GET['id'];
         $admin = new AdminModel();
 
-        if(!empty($id)){
+        if(!empty($id))
+        {
             $sql = "delete from admin where aid='".$id."'";
             if($admin->query($sql))
             {
@@ -204,7 +232,9 @@ class Admin extends Controller
 
                 return redirect()->to('/admin/adminManagement');
             }
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/manageAdmin');
         }
@@ -215,13 +245,16 @@ class Admin extends Controller
         $id = $_GET['id'];
         $detail = new ContactModel();
 
-        if(!empty($id)){
-            $sql = "select * from user_contact where cid='".$id."'";
+        if(!empty($id))
+        {
+            $sql = "SELECT * FROM user_contact INNER JOIN user ON user_contact.uid=user.uid WHERE cid='".$id."'";
 
             $data['detail'] = $detail->query($sql);
             
             return view('adminview/detail', $data);
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/detail');
         }
@@ -243,16 +276,26 @@ class Admin extends Controller
 
         $detail = new BlogModel();
 
-        if(!empty($id)){
+        if(!empty($id))
+        {
             $sql = "select * from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid where blog_post.bid='".$id."' order by blog_post.bid";
 
             $data['detail'] = $detail->query($sql);
     
             return view('adminview/detailpost', $data);
-        } else {
+        } 
+        else 
+        {
             $session->set('error','something went wrong.');
             return view('adminview/detailpost');
         }
+    }
+
+    public function reportedBlog()
+    {
+        $report = new ReportModel();
+        //TODO: have to get all data of blog which is reported and fetch it on reportBlog page
+        return view('adminview/reportBlog');
     }
 }
 
