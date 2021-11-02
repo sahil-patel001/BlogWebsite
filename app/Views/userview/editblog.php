@@ -28,7 +28,6 @@
             <div class="d-flex">
                 <?php foreach($img as $dataImg) { ?>
                 <div class="p-2 me-2" style="position: relative;">
-                    <!-- <div><?php //echo $dataImg['img']; ?></div> -->
                     <?php $imgURL = base_url('./upload').'/'.$dataImg['img']; ?>
                     <img src="<?php echo $imgURL ?>" class="mb-2"
                         style="width: 100px; height: 100px; objectfit: cover;">
@@ -47,33 +46,13 @@
                 id="description" required><?php echo $data['b_description'] ?></textarea>
         </div>
 
-        <button type="submit" name="update" class="btn btn-primary">Update</button>
+        <button type="submit" name="update" class="btn btn-primary mb-3">Update</button>
+        <div class="col-12">
+            <a href="<?php echo base_url('user/poststatus') ?>" class="btn btn-primary"><i
+                    class="bi bi-arrow-left-circle-fill"></i></a>
+        </div>
     </form>
     <?php } ?>
 </div>
-<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script>
-$(document).ready(function() {
-    $(document).on('click', '#reportpost', function() {
-        var data = {
-            'reason': $('#reason').val(),
-        }
-        $.ajax({
-            method: "POST",
-            url: "<?php //echo base_url('user/reportpost') ?>",
-            data: data,
-            success: function(response) {
-                $('#reportModel').modal('hide');
-                $('#reportModel').find('input').val('');
-                alertify.set('notifier', 'position', 'top-left');
-                alertify.success(response.status);
-            },
-            error: function(error) {
-                alert("Please Enter The Reason!");
-            }
-        });
-    });
-});
-</script> -->
 <br>
 <?php echo view('templetes/footer'); ?>

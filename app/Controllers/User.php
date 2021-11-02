@@ -199,13 +199,10 @@ class User extends Controller
         } else {
             if($contact->insert($data))
             {
-                $message = ['status'=>'Message Sent Successfully.'];
-                return $this->response->setJSON($message);
-            } //else 
-            // {
-            //     $session->set('unsend', 'Something Went Wrong.');
-            //     return view("userview/contact");
-            // }
+                echo json_encode(array(
+                    "statusCode"=>200
+                ));
+            }
         }
     }
 
@@ -412,14 +409,13 @@ class User extends Controller
         $data = [
             'fname' => $this->request->getVar('fname'),
             'lname' => $this->request->getVar('lname'),
-            'password' => $this->request->getVar('password'),
             'phone' => $this->request->getVar('phone'),
         ];
 
         $user = new UserModel();
 
         if(!empty($id)){
-            $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', password='".$data['password']."', phone='".$data['phone']."' where uid='".$id."'";
+            $sql = "update user SET fname='".$data['fname']."', lname='".$data['lname']."', phone='".$data['phone']."' where uid='".$id."'";
             if($user->query($sql)){
                 $session = session();
                 $session->set('update','Update Successfully.');
@@ -498,4 +494,4 @@ class User extends Controller
     }
 }
 
-?>                  
+?>

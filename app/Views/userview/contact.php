@@ -16,7 +16,10 @@ $session->remove('send'); ?>
 <?php } 
 $session->remove('unsend'); ?>
 <div class="col-lg-6 m-auto">
-    <form>
+    <form id="fupForm">
+        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert" id="success" style="display:none;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+        </div>
         <div class="form-group mb-3">
             <label class="mb-2" for="subject">Subject:</label><span id="error_subject" class="text-danget ms-5"></span>
             <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject Title" required>
@@ -35,19 +38,34 @@ $session->remove('unsend'); ?>
 <script>
 $(document).ready(function() {
     $(document).on('click', '#send', function() {
-            var data = {
-                'subject': $('#subject').val(),
-                'message': $('#message').val(),
-            }
+
+        var data = {
+            'subject': $('#subject').val(),
+            'message': $('#message').val(),
+        }
+
+        if (data['subject'] != "" && data['message'] != "") {
+            $("#send").attr("disabled", "disabled");
             $.ajax({
-                method: "POST",
+                type: "POST",
                 url: "<?php echo base_url('User/sendMessage') ?>",
                 data: data,
                 success: function(response) {
-                    alertify.set('notifier', 'position', 'top-left');
-                    alertify.success(response.status); 
+                    var dataResult = JSON.parse(response);
+                    if (dataResult.statusCode == 200) {
+                        $("#send").removeAttr("disabled");
+                        $('#fupForm').find('input:text').val('');
+                        $('#message').val('');
+                        $("#success").show();
+                        $('#success').html('Message Sent Successfully !');
+                    } else if (dataResult.statusCode == 201) {
+                        alert("Error occured !");
+                    }
                 }
             });
+        } else {
+            alert('Please fill all the field !');
+        }
     })
 })
 </script>

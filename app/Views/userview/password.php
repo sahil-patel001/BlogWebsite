@@ -41,29 +41,11 @@
             <label class="mb-2" for="title">Confirm New Password: </label>
             <input type="password" class="form-control" name="confirm" id="confirm" required>
         </div>
-        <button type="submit" name="post" class="btn btn-primary">Change Password</button>
+        <button type="submit" name="post" class="btn btn-primary mb-3">Change Password</button>
+        <div class="col-12">
+            <a href="<?php echo base_url('user/profile') ?>" class="btn btn-primary"><i
+                    class="bi bi-arrow-left-circle-fill"></i></a>
+        </div>
     </form>
 </div>
-<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script>
-$(document).ready(function() {
-    $(document).on('click', '#pwd', function() {
-        var data = {
-            'current': $('#current').val(),
-            'new': $('#new').val(),
-            'confirm': $('#confirm').val(),
-        }
-        $.ajax({
-            type: "POST",
-            url: "<?php //echo base_url('User/changePassword?id='. $session->get('id')); ?>",
-            data: data,
-            success: function(response) {
-                console.log(url);
-                // alertify.set('notifier', 'position', 'top-left');
-                // alertify.success(response.status);
-            }
-        });
-    })
-})
-</script> -->
 <?php echo view('templetes/footer'); ?>

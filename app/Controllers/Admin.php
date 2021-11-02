@@ -21,9 +21,7 @@ class Admin extends Controller
     public function userManagement()
     {
         $user = new UserModel();
-        $data['all_user'] = $user->paginate(10);
-
-        $data['pagination_link'] = $user->pager;
+        $data['all_user'] = $user->findAll();
 
         return view('adminview/manageUser', $data);
     }
@@ -34,9 +32,7 @@ class Admin extends Controller
         $aid = $session->get('id');
         $admin = new AdminModel();
         if(!empty($aid)){
-            $data['all_admin'] = $admin->where('aid !=',$aid)->paginate(10);
-
-            $data['pagination_link'] = $admin->pager;
+            $data['all_admin'] = $admin->where('aid !=',$aid)->findAll();
 
             return view('adminview/manageAdmin', $data);
         } else {
@@ -49,8 +45,7 @@ class Admin extends Controller
     {
         $contact = new ContactModel();
 
-        $data['receive_msg'] = $contact->paginate(10);
-        $data['pagination_link'] = $contact->pager;
+        $data['receive_msg'] = $contact->findAll();
 
         return view('adminview/messagesFromUser', $data);
     }

@@ -11,7 +11,7 @@
     <br>
 </div>
 <div class="container">
-    <table id="message" class="display text-center">
+    <table id="message" class="display text-center" cellspacing="0" width="100%">
         <?php $counter = 1; ?>
         <thead>
             <tr>
