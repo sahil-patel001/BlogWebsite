@@ -225,6 +225,36 @@ class User extends Controller
         }
     }
 
+    // public function update($any)
+    // {
+        
+    //     $modal = new Student();
+	// 	$data['user_data'] = $modal->where('id',$any)->first();
+    //     //get the file name
+    //     $file = $this->request->getFile('profile_pic');
+    //     $name="";
+    //     if(isset($file) && !empty($file))
+    //     {
+    //         $name = $file->getRandomName();
+    //         // $file->move('uploads', $name);
+            
+    //     }
+
+    //     $data = [
+    //         'name'	=>	$this->request->getVar('name'),
+    //         'surname'	=>	$this->request->getVar('surname'),
+    //         'age'=>	$this->request->getVar('age'),
+    //     ];
+    //     if(isset($name) && !empty($name))
+    //     {
+    //         $data['profile_pic']= $name;
+    //     }
+    //     $modal->update($any,$data);
+    //     $session = session();
+    //     $session->setFlashdata("success", "Data has been updated successfully ...!!");
+    //     return $this->response->redirect('/index');
+    // }
+
     public function editpost()
     {
         $id = $_GET['id'];
@@ -246,20 +276,18 @@ class User extends Controller
 
             if(!empty($imgs)){
                 foreach($imgs['img'] as $img){
-                    if(!empty($img)){
-                        $imgName = $img->getName().date('Y-m-d H:i:s');
-                        $dataImg = [
-                            'bid' => $id,
-                            'img' => $img->move('./upload', $imgName),
-                            'img' =>  $img->getName(),
-                            'updated' => date('Y-m-d H:i:s'),
-                        ];
-                        $addImg->insert($dataImg);
-                    } else {
-                        $sql1 = "UPDATE blog_image SET updated='".$dataImg['updated']."' where bid='".$id."'";
-                        $addImg->query($sql1);
-                    }
+                    $imgName = $img->getName().date('Y-m-d H:i:s');
+                    $dataImg = [
+                        'bid' => $id,
+                        'img' => $img->move('./upload', $imgName),
+                        'img' =>  $img->getName(),
+                        'updated' => date('Y-m-d H:i:s'),
+                    ];
+                    $addImg->insert($dataImg);     
                 } 
+            } else {
+                $sql1 = "UPDATE blog_image SET updated='".$dataImg['updated']."' where bid='".$id."'";
+                $addImg->query($sql1);
             }
             $session = session();
             $session->set('update','Post Edited Successfully.');
