@@ -50,7 +50,7 @@ class Pages extends BaseController
             'password' => md5($this->request->getVar('password')),
             'account' => $this->request->getVar('account'),
             'phone' => $this->request->getVar('phone'),
-            'created' => date('Y-m-d H:i:s'),
+            // 'created' => date('Y-m-d H:i:s'),
         ];
 
         if($data['account'] == 'User'){

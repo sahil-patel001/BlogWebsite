@@ -93,7 +93,6 @@ class User extends Controller
             'uid' => $session->get('id'),
             'b_title' => $this->request->getVar('title'),
             'b_description' => $this->request->getVar('description'),
-            'created' => date('Y-m-d H:i:s'),
         ];
 
         $post = new BlogModel();    
@@ -130,7 +129,7 @@ class User extends Controller
                     'img' => $img->move('./upload', $imgName),
                     'img' =>  $img->getName(),
                     'bid' => $id,
-                    'created' => date('Y-m-d H:i:s'),
+                    // 'created' => date('Y-m-d H:i:s'),
                 ];
                 $addImg->insert($dataImg);
             }     
@@ -374,7 +373,7 @@ class User extends Controller
         $data = [
             'uid' => $session->get('id'),
             'reason' => $this->request->getPost('reason'),
-            'created' => date('Y-m-d H:i:s'),
+            // 'created' => date('Y-m-d H:i:s'),
         ];
 
         if(!empty($data['uid']) && !empty($data['reason'])){
@@ -430,12 +429,6 @@ class User extends Controller
         }
     
     }
-
-    // public function addedBy()
-    // {
-    //     $uid = $_GET['id'];
-    //     $user = new UserModel();
-    // }
 
     public function password()
     {

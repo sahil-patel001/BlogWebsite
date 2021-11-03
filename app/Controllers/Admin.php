@@ -294,8 +294,11 @@ class Admin extends Controller
     public function reportedBlog()
     {
         $report = new ReportModel();
+        $sql = "SELECT * FROM report_blog INNER JOIN user ON report_blog.uid=user.uid";
+
+        $data['report'] = $report->query($sql)->getResultArray();
         //TODO: have to get all data of blog which is reported and fetch it on reportBlog page
-        return view('adminview/reportBlog');
+        return view('adminview/reportBlog',$data);
     }
 }
 

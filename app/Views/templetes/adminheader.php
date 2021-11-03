@@ -50,7 +50,7 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+                        <a class="nav-link" aria-current="page" href="/logout" onClick="return confirm('Are you sure?')">Logout</a>
                     </li>
                 </ul>
             </div>

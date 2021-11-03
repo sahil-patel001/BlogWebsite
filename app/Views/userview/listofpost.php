@@ -70,7 +70,6 @@
                                 class="btn btn-outline-primary likebtn" data="<?php echo $data['bid'] ?>"><i
                                     class="bi bi-heart"></i></button><?php } ?></a>
                     </div>
-                    <!-- TODO: redirect to the controller function with the session bid or pass bid in url as id and fetch it in the function -->
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <button class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -97,14 +96,12 @@
                 url: "<?php echo base_url('user/reportpost') ?>",
                 data: data,
                 success: function(response) {
-                        $('#reportModel').modal('hide');
-                        $('#reportModel').find('input').val('');
-                        alertify.set('notifier', 'position', 'top-left');
-                        alertify.success(response.status);
+                    $('#reportModel').modal('hide');
+                    $('#reportModel').find('input').val('');
+                    alertify.set('notifier', 'position', 'top-left');
+                    alertify.success(response.status);
                 },
                 error: function(error) {
-                    // alertify.set('notifier', 'position', 'top-left');
-                    // alertify.danger('Please Enter The Reason!');
                     alert("Please Enter The Reason!");
                 }
             });
