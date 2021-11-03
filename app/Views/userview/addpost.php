@@ -12,6 +12,10 @@
 <br>
 <div class="col-lg-6 m-auto">
     <form id="addpost" enctype="multipart/form-data">
+        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert" id="success"
+            style="display:none;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+        </div>
         <div class="form-group mb-3">
             <label class="mb-2" for="title">Title: </label>
             <input type="text" class="form-control" name="title" id="title" placeholder="Blog Title" required>
@@ -30,34 +34,29 @@
     </form>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 $(document).ready(function() {
     $(document).on('click', '#post', function() {
-        var form_data = new FormData();
-        // Read selected files
-        var totalfiles = document.getElementById('img').files.length;
-        for (var index = 0; index < totalfiles; index++) {
-            form_data.append("img[]", document.getElementById('img').files[index]);
-        }
-        form_data.append('title', $('#title').val());
-        form_data.append('description', $('#description').val());
-
-        // for (var pair of form_data.entries()) {
-        //     console.log(pair[0] + ', ' + pair[1]);
-        // }
-
-        // var form = $('addpost')[0];
-        // var form_data = new FormData(addpost);
 
         $.ajax({
             type: 'POST',
             url: "<?php echo base_url('user/save') ?>",
-            data: form_data,
+            data: new FormData(document.getElementById("addpost")),
             cache: false,
             contentType: false,
             processData: false,
             success: function(response) {
-                alert(data);
+                swal("Alright!", "You successfully created blog!", "success");
+                // var dataResult = JSON.parse(response);
+                // if (dataResult.statusCode == 200) {
+                //     $('#addpost').find('input').val('');
+                //     $('#description').val('');
+                //     $("#success").show();
+                //     $('#success').html('Message Sent Successfully !');
+                // } else if (dataResult.statusCode == 201) {
+                //     alert("Error occured !");
+                // }
             }
         });
     })

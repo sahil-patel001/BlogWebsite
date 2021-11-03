@@ -129,15 +129,16 @@ class User extends Controller
                     'img' => $img->move('./upload', $imgName),
                     'img' =>  $img->getName(),
                     'bid' => $id,
-                    // 'created' => date('Y-m-d H:i:s'),
                 ];
                 $addImg->insert($dataImg);
             }     
 
             if(isset($post))
             {
-                $session->set('post','Post Created Successfully.');
-                return redirect()->to('user/poststatus');
+                return TRUE;
+                // echo json_encode(array(
+                //     "statusCode"=>200
+                // ));
             }
             else
             {
@@ -237,26 +238,29 @@ class User extends Controller
         ];
 
         if(!empty($id)){
-            $sql = "update blog_post SET b_title='".$data['b_title']."', b_description='".$data['b_description']."', updated='".$data['updated']."' where bid='".$id."'";
+            $sql = "UPDATE blog_post SET b_title='".$data['b_title']."', b_description='".$data['b_description']."', updated='".$data['updated']."' where bid='".$id."'";
 
             $blog->query($sql);
 
-            $imgs = $this->request->getFiles();
-            foreach($imgs['img'] as $img){
-                if(!empty($img)){
-                    $imgName = $img->getName().date('Y-m-d H:i:s');
-                    $dataImg = [
-                        'bid' => $id,
-                        'img' => $img->move('./upload', $imgName),
-                        'img' =>  $img->getName(),
-                        'updated' => date('Y-m-d H:i:s'),
-                    ];
-                    $addImg->insert($dataImg);
-                } else {
-                    $sql1 = "update blog_image SET updated='".$dataImg['updated']."' where bid='".$id."'";
-                    $addImg->query($sql1);
-                }
-            }  
+            $imgs = $this->request->getFiles("img");
+
+            if(!empty($imgs)){
+                foreach($imgs['img'] as $img){
+                    if(!empty($img)){
+                        $imgName = $img->getName().date('Y-m-d H:i:s');
+                        $dataImg = [
+                            'bid' => $id,
+                            'img' => $img->move('./upload', $imgName),
+                            'img' =>  $img->getName(),
+                            'updated' => date('Y-m-d H:i:s'),
+                        ];
+                        $addImg->insert($dataImg);
+                    } else {
+                        $sql1 = "UPDATE blog_image SET updated='".$dataImg['updated']."' where bid='".$id."'";
+                        $addImg->query($sql1);
+                    }
+                } 
+            }
             $session = session();
             $session->set('update','Post Edited Successfully.');
             //insert the data into db and show it on post status
