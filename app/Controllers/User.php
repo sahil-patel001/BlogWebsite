@@ -32,7 +32,7 @@ class User extends Controller
         $getAll = new BlogModel();
         $like = new LikeModel();
 
-        $sql = "SELECT *, CEILING(COUNT(totallike.likeid) / COUNT(DISTINCT blog_image.img_id)) AS total, IF(COUNT(blog_likebtn.likeid)>0, 'Yes', 'No') AS islike FROM blog_post INNER JOIN blog_image ON blog_image.bid=blog_post.bid INNER JOIN user ON user.uid=blog_post.uid INNER JOIN blog_likebtn AS totallike ON totallike.bid=blog_post.bid INNER JOIN blog_likebtn ON blog_likebtn.uid=".$session->get('id')." AND blog_post.bid=blog_likebtn.bid WHERE blog_post.status='approved' GROUP BY blog_image.bid ORDER BY blog_post.created DESC";
+        $sql = "SELECT *, CEILING(COUNT(totallike.likeid) / COUNT(DISTINCT blog_image.img_id)) AS total, IF(COUNT(blog_likebtn.likeid)>0, 'Yes', 'No') AS islike FROM blog_post INNER JOIN blog_image ON blog_image.bid=blog_post.bid INNER JOIN user ON user.uid=blog_post.uid INNER JOIN blog_likebtn AS totallike ON totallike.bid=blog_post.bid INNER JOIN blog_likebtn ON blog_likebtn.uid=".$session->get('id')." AND blog_post.bid=blog_likebtn.bid WHERE blog_post.status='approved' GROUP BY blog_image.bid ORDER BY total DESC";
         
         $data['liked_post'] = $getAll->query($sql);
         

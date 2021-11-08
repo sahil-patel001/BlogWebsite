@@ -35,8 +35,7 @@
     <div class="row col-lg-11 d-flex">
         <?php foreach($all_data->getResult('array') as $data) { 
             $session->set('bid',$data['bid']);
-            // print_r($session->get('bid'));
-            // die();
+            
             $imgURL = base_url('./upload').'/'.$data['img']; ?>
 
         <div class="card ms-5 mb-5 me-5" style="width: 18rem;">
@@ -64,10 +63,10 @@
                     <div class="d-flex justify-content-between" style="margin-bottom: 10px">
                         <a href="user/detail?id=<?php echo $data["bid"] ?>" class="btn btn-primary">Detail
                             Blog</a>
-                        <a href="user/like?id=<?php echo $data["bid"] ?>"><?php if($data['islike'] == 'Yes') { ?><button
-                                class="btn btn-outline-danger" data="<?php echo $data['bid'] ?>"><i
+                        <a id="likebtn" href="user/like?id=<?php echo $data["bid"] ?>"><?php if($data['islike'] == 'Yes') { ?><button
+                                class="btn btn-outline-danger"><i
                                     class="bi bi-heart-fill"></i></button><?php } else { ?><button
-                                class="btn btn-outline-primary likebtn" data="<?php echo $data['bid'] ?>"><i
+                                class="btn btn-outline-primary likebtn"><i
                                     class="bi bi-heart"></i></button><?php } ?></a>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
@@ -106,6 +105,19 @@
                 }
             });
         });
+    });
+    $(document).ready(function() {
+        $(document).on('click', '#likebtn', function() {
+            $.ajax({
+                url: "<?php echo base_url('user/like?id=').$data['bid'] ?>",
+                success: function(response) {
+                   console.log(url); 
+                },
+                error: function(error) {
+                    
+                }
+            });
+        })
     });
     </script>
 
