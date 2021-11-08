@@ -44,7 +44,10 @@
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/user/addpost">Add Post</a>
+                        <a class="nav-link" aria-current="page" href="/user/likedpost">Liked Post</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/addpost">Add Post</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/user/poststatus">Post Status</a>

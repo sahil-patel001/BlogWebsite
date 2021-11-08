@@ -19,13 +19,26 @@ class User extends Controller
         $getAll = new BlogModel();
         $like = new LikeModel();
 
-        $sql = "SELECT *,blog_post.bid,blog_post.uid,COUNT(totallike.likeid) AS total, IF(COUNT(likebtn.likeid)>0, 'Yes', 'No') AS islike FROM blog_post INNER JOIN blog_image ON blog_post.bid = blog_image.bid INNER JOIN user ON blog_post.uid = user.uid LEFT JOIN blog_likebtn AS totallike ON totallike.bid=blog_post.bid LEFT JOIN blog_likebtn AS likebtn ON likebtn.bid=blog_post.bid AND likebtn.uid=".$session->get('id')." WHERE blog_post.status='approved' GROUP BY totallike.bid,blog_image.bid ORDER BY blog_post.created DESC";
+        $sql = "SELECT *,blog_post.bid,blog_post.uid,COUNT(totallike.likeid) AS total, IF(COUNT(likebtn.likeid)>0, 'Yes', 'No') AS islike FROM blog_post INNER JOIN blog_image ON blog_post.bid = blog_image.bid INNER JOIN user ON blog_post.uid = user.uid LEFT JOIN blog_likebtn AS totallike ON totallike.bid=blog_post.bid LEFT JOIN blog_likebtn AS likebtn ON likebtn.bid=blog_post.bid AND likebtn.uid=".$session->get('id')." WHERE blog_post.status='approved' GROUP BY totallike.bid,blog_image.bid ORDER BY total DESC";
         // $sql = "select *,blog_post.bid,blog_post.uid,count(blog_likebtn.likeid) as total,IF(count(blog_likebtn.likeid)>0, 'Yes' ,'No') as islike from blog_post inner join blog_image on blog_post.bid = blog_image.bid inner join user on blog_post.uid = user.uid left join blog_likebtn on blog_post.bid=blog_likebtn.bid and blog_post.bid = blog_image.bid and blog_likebtn.uid='".$session->get('id')."' where blog_post.status='approved' group by blog_image.bid,blog_likebtn.bid order by blog_post.created desc";
         // print_r($sql);
         // die();
         $data['all_data'] = $getAll->query($sql);
         
         return view('userview/listofpost', $data);
+    }
+
+    public function likedpost()
+    {
+        $session = session();
+        $getAll = new BlogModel();
+        $like = new LikeModel();
+
+        $sql = "SELECT *, COUNT(blog_likebtn.likeid) AS total, IF(COUNT(blog_likebtn.likeid)>0, 'Yes', 'No') AS islike FROM blog_post INNER JOIN blog_image ON blog_image.bid=blog_post.bid INNER JOIN user ON user.uid=blog_post.uid INNER JOIN blog_likebtn ON blog_likebtn.uid=".$session->get('id')." AND blog_post.bid=blog_likebtn.bid WHERE blog_post.status='approved' GROUP BY blog_image.bid ORDER BY blog_post.created DESC";
+        
+        $data['liked_post'] = $getAll->query($sql);
+        
+        return view('userview/likedPost', $data);
     }
 
     public function addpost()
