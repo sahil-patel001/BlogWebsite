@@ -277,11 +277,11 @@ class User extends Controller
         $data = [
             'b_title' => $this->request->getvar('title'),
             'b_description' => $this->request->getvar('description'),
-            'updated' => date('Y-m-d H:i:s'),
+            // 'updated' => date('Y-m-d H:i:s'),
         ];
 
         if(!empty($id)){
-            $sql = "UPDATE blog_post SET b_title='".$data['b_title']."', b_description='".$data['b_description']."', updated='".$data['updated']."' where bid='".$id."'";
+            $sql = "UPDATE blog_post SET b_title='".$data['b_title']."', b_description='".$data['b_description']."' where bid='".$id."'";
 
             $blog->query($sql);
 
