@@ -386,7 +386,7 @@ class User extends Controller
         }
     }
 
-    public function like()
+    public function like()                                  
     {
         $like = new LikeModel();
         $session = session();
@@ -400,13 +400,33 @@ class User extends Controller
                 $like->query($sql1);
             } else {
                 $like->where('bid',$bid)->where('uid',$uid)->delete();
-            }
-            return redirect()->to('user');
+            }       
+            
+            $sql = "SELECT IF(COUNT(blog_likebtn.likeid)>0, 'Yes', 'No') AS isLike FROM blog_likebtn WHERE uid=$uid AND bid=$bid";
+            $data['likebtn'] = $like->query($sql)->getRow();
+
+            $sql = "SELECT COUNT(blog_likebtn.likeid) AS total FROM blog_likebtn WHERE bid=$bid";
+            $data['total'] = $like->query($sql)->getRow();
+            
+            return json_encode($data['likebtn']->isLike);
         } else {
             $session->set('error','something went wrong.');
             return redirect()->to('user');
         }
     }
+
+    //TODO: this is a function called from listofpost ajax for getting total like after like or dislike particular post
+    // public function totallike()
+    // {
+    //     $like = new LikeModel();
+    //     $session = session();
+    //     $bid = $_GET['id'];
+
+    //     $sql = "SELECT COUNT(blog_likebtn.likeid) AS total FROM blog_likebtn WHERE bid=$bid";
+    //     $data['total'] = $like->query($sql)->getRow();
+
+    //     return json_encode($data['total']->total);
+    // }
 
     public function reportpost()
     {

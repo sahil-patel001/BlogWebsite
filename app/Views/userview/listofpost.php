@@ -63,18 +63,18 @@
                     <div class="d-flex justify-content-between" style="margin-bottom: 10px">
                         <a href="user/detail?id=<?php echo $data["bid"] ?>" class="btn btn-primary">Detail
                             Blog</a>
-                        <a id="likebtn" href="user/like?id=<?php echo $data["bid"] ?>"><?php if($data['islike'] == 'Yes') { ?><button
-                                class="btn btn-outline-danger"><i
-                                    class="bi bi-heart-fill"></i></button><?php } else { ?><button
-                                class="btn btn-outline-primary likebtn"><i
-                                    class="bi bi-heart"></i></button><?php } ?></a>
+                        <?php if($data['islike'] == 'Yes') { ?><button
+                            class="btn btn-outline-danger bi bi-heart-fill likebtn"
+                            id="<?php echo $data["bid"] ?>"></button><?php } else { ?><button
+                            class="btn btn-outline-primary bi bi-heart likebtn"
+                            id="<?php echo $data["bid"] ?>"></button><?php } ?>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <button class="btn btn-outline-danger" data-bs-toggle="modal"
                                 data-bs-target="#reportModel">Report</button>
                         </div>
-                        <div>
+                        <div class="totalLike" id="<?php echo $data["bid"] ?>">
                             Likes: <?php echo $data['total']; ?>
                         </div>
                     </div>
@@ -107,18 +107,43 @@
         });
     });
     $(document).ready(function() {
-        $(document).on('click', '#likebtn', function() {
+        $('.likebtn').click(function(e) {
+            e.preventDefault();
+            var id = $(this).attr('id');
+            var url = "<?php echo base_url('user/like?id=strid')?>";
+            url = url.replace('strid', id);
             $.ajax({
-                url: "<?php echo base_url('user/like?id=').$data['bid'] ?>",
-                success: function(response) {
-                   console.log(url); 
+                url: url,
+                success: function(res) {
+                    var x = res;
+                    var y = x.replace('"Yes"', 'Yes');
+                    if (y == 'Yes') {
+                        $('#' + id).removeClass('btn-outline-primary bi bi-heart').addClass(
+                            'btn-outline-danger bi bi-heart-fill');
+                    } else {
+                        $('#' + id).removeClass('btn-outline-danger bi bi-heart-fill')
+                            .addClass('btn-outline-primary bi bi-heart');
+                    }
+                    window.location.reload();
                 },
-                error: function(error) {
-                    
-                }
+                error: function(error) {}
             });
         })
     });
+    //TODO: this is a script for get total likes while using upper script on like or dislike
+    // $(document).ready(function() {
+    //     $('.likebtn').click(function(e) {
+    //         var id = $(this).attr('id');
+    //         var url = "<?php //echo base_url('user/totallike?id=strid')?>";
+    //         url = url.replace('strid', id);
+    //         $.ajax({
+    //             url: url,
+    //             success: function(res) {
+
+    //             }
+    //         }):
+    //     })
+    // });
     </script>
 
 </div>
